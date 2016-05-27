@@ -1,0 +1,6 @@
+flask==0.10.1
+sqlalchemy==1.0.13
+flask-failsafe==0.2
+psycopg2==2.6.1
+passlib==1.6.5
+voluptuous==0.8.11
