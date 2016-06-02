@@ -1,3 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Node/Webpack
+node_modules/
+build/bundle.js
