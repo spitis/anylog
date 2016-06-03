@@ -4,3 +4,4 @@ flask-failsafe==0.2
 psycopg2==2.6.1
 passlib==1.6.5
 voluptuous==0.8.11
+flask_sqlalchemy==2.1
