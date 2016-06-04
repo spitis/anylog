@@ -8,3 +8,5 @@ build/bundle.js
 
 # Other
 old/
+.coverage
+htmlcov/

@@ -24,3 +24,22 @@ userSchema = Schema({
     'email': All(str, Email()),
     'active': bool
 })
+
+newEventSchema = Schema({
+    'namespace': str,
+    Required('event_name'): str,
+    Required('user'): object,
+    'event_tags': [],
+    'event_json': dict,
+    'timestamp': int
+})
+
+getEventsSchema = Schema({
+    'namespace': str,
+    'event_name': str,
+    'event_tags': [],
+    'timestart': int,
+    'timestop': int,
+    'max_events': int,
+    'offset': int
+})

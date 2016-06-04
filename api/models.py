@@ -1,5 +1,8 @@
+from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from itsdangerous import (TimedJSONWebSignatureSerializer,\
+    BadSignature, SignatureExpired)
 db = SQLAlchemy()
 
 #UTILS
@@ -45,9 +48,26 @@ class User(db.Model):
 
     def change_password(self, newPassword):
         self.password = pwd_context.encrypt(newPassword)
-        
+
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
+
+    def generate_auth_token(self, expiration=600):
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'],\
+            expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None    # valid token, but expired
+        except BadSignature:
+            return None    # invalid token
+        user = User.query.get(data['id'])
+        return user
 
     def __repr__(self):
         return '<User %r>' % self.username

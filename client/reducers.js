@@ -1,41 +1,67 @@
-import Immutable from 'immutable';
+import { combineReducers } from 'redux';
 
 import {
+  CREATE_ACCOUNT_ATTEMPT,
+  CREATE_ACCOUNT_FAILED,
   LOGIN_ATTEMPT,
   LOGIN_FAILED,
   LOGIN_SUCCESSFUL,
+  LOGOUT,
 } from './actions.js';
 
-const defaultState = new Immutable.Map({
-  username: '',
-  password: '',
+const userDefaultState = {
+  isCreatingAccount: false,
+  createAccountError: null,
   isLoggingIn: false,
   isLoggedIn: false,
-  error: null,
-});
+  loginError: null,
+  loginToken: null,
+  username: null,
+};
 
-export default function app(state = defaultState, action) {
+function user(state = userDefaultState, action) {
   switch (action.type) {
+    case CREATE_ACCOUNT_ATTEMPT:
+      return Object.assign({}, state, {
+        isCreatingAccount: true,
+        isLoggedIn: false,
+      });
+    case CREATE_ACCOUNT_FAILED:
+      return Object.assign({}, state, {
+        createAccountError: action.error,
+        isCreatingAccount: false,
+        isLoggedIn: false,
+      });
     case LOGIN_ATTEMPT:
-      return state.merge({
+      return Object.assign({}, state, {
         isLoggingIn: true,
         isLoggedIn: false,
-        username: action.username,
-        password: action.password,
       });
     case LOGIN_FAILED:
-      return state.merge({
-        error: action.error,
+      return Object.assign({}, state, {
+        loginError: action.error,
         isLoggingIn: false,
         isLoggedIn: false,
       });
     case LOGIN_SUCCESSFUL:
-      return state.merge({
-        error: null,
+      return Object.assign({}, state, {
+        loginError: null,
+        createAccountError: null,
         isLoggingIn: false,
+        isCreatingAccount: false,
         isLoggedIn: true,
+        loginToken: action.token,
+        username: action.username,
       });
+    case LOGOUT:
+      return Object.assign({}, state, userDefaultState);
     default:
       return state;
   }
 }
+
+const app = combineReducers({
+  user,
+});
+
+export default app;

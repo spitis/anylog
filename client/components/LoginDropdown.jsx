@@ -10,57 +10,90 @@ import {
   Button,
 } from 'react-bootstrap';
 
-export default () => (
+const LoginDropdown = (props) => (
   <NavDropdown title="Login" id="login-navdropdown">
-    <LoginFormDropdown />
+    <LoginFormDropdown loginHandler={props.loginHandler} />
   </NavDropdown>
 );
 
-const LoginFormDropdown = (props) => (
-  <div id="login-dp">
-    <form>
-      <FormGroup controlId="login-email">
-        <ControlLabel srOnly>Email address</ControlLabel>
-        <FormControl
-          onSelect={(e) => e.stopPropagation()}
-          type="email"
-          placeholder="Email address"
-          required
-        />
-      </FormGroup>
-      <FormGroup controlId="login-password">
-        <ControlLabel srOnly>Password</ControlLabel>
-        <FormControl
-          onSelect={(e) => e.stopPropagation()}
-          type="password"
-          placeholder="Password"
-          required
-        />
-      </FormGroup>
-      <div className="help-block text-right">
-        <Link to="forgotpassword" onClick={() => (props.onSelect())}>
-          Forgot password
-        </Link>
+LoginDropdown.propTypes = {
+  loginHandler: React.PropTypes.func,
+};
+
+export default LoginDropdown;
+
+class LoginFormDropdown extends React.Component {
+
+  onChangeUser = (e) => {
+    this.setState({ usernameOrEmail: e.target.value });
+  }
+  onChangePass = (e) => {
+    this.setState({ password: e.target.value });
+  }
+
+  render() {
+    return (
+      <div id="login-dp">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.props.loginHandler(
+              this.state.usernameOrEmail,
+              this.state.password
+            );
+          }}
+        >
+          <FormGroup controlId="login-email">
+            <ControlLabel srOnly>Username or Email</ControlLabel>
+            <FormControl
+              onSelect={(e) => e.stopPropagation()}
+              onChange={this.onChangeUser}
+              type="text"
+              placeholder="Username or Email"
+              required
+            />
+          </FormGroup>
+          <FormGroup controlId="login-password">
+            <ControlLabel srOnly>Password</ControlLabel>
+            <FormControl
+              onSelect={(e) => e.stopPropagation()}
+              onChange={this.onChangePass}
+              type="password"
+              placeholder="Password"
+              required
+            />
+          </FormGroup>
+          <div className="help-block text-right">
+            <Link to="forgotpassword" onClick={() => (this.props.onSelect())}>
+              Forgot password
+            </Link>
+          </div>
+          <Button
+            type="submit"
+            bsStyle="primary"
+            block
+          >
+            Sign in
+          </Button>
+          {/* <div className="checkbox">
+                <label>
+                  <input type="checkbox" />
+                  keep me logged-in
+                </label>
+              </div>*/}
+        </form>
+        <div className="bottom text-center">
+          New?&nbsp;&nbsp;&nbsp;
+          <Link to="/createaccount" onClick={() => (this.props.onSelect())}>
+              Create an account
+          </Link>
+        </div>
       </div>
-      <Button type="submit" bsStyle="primary" block>
-        Sign in
-      </Button>
-      {/* <div className="checkbox">
-            <label>
-              <input type="checkbox" />
-              keep me logged-in
-            </label>
-          </div>*/}
-    </form>
-    <div className="bottom text-center">
-      New?&nbsp;&nbsp;&nbsp;
-      <Link to="/createaccount" onClick={() => (props.onSelect())}>
-          Create an account
-      </Link>
-    </div>
-  </div>
-);
+    );
+  }
+}
 
 LoginFormDropdown.propTypes = {
   onSelect: React.PropTypes.func,
+  loginHandler: React.PropTypes.func,
 };

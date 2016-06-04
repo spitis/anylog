@@ -9,6 +9,7 @@
 """
 
 from flask import Flask
+from flask_cors import CORS
 import sqlalchemy as sa
 from sqlalchemy.engine.url import URL
 
@@ -22,6 +23,7 @@ from api.models import db
 """
 
 app = Flask(__name__)
+CORS(app)
 
 app.config.update(dict(
     DEBUG=True,

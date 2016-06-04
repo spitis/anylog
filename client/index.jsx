@@ -2,20 +2,29 @@ import './styles/bootswatch.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App.jsx';
-import Home from './components/Home.jsx';
-import Page404 from './components/Page404.jsx';
-import CreateAccount from './components/CreateAccount.jsx';
 
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
 
-ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={Home} />
-      <Route path="/createaccount" component={CreateAccount} />
-      <Route path="*" component={Page404} />
-    </Route>
-  </Router>,
-  document.getElementById('app')
-);
+import { createStore } from 'redux';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import app from './reducers.js';
+
+import routes from './routes.js';
+
+let store = createStore(app, undefined, autoRehydrate());
+persistStore(store, {}, loadApp);
+
+// FOR DEBUGGING
+window.store = store;
+import { login } from './actions.js';
+window.login = login;
+
+function loadApp() {
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={browserHistory} routes={routes(store)} />
+    </Provider>,
+    document.getElementById('app')
+  );
+}

@@ -1,8 +1,52 @@
+/*
+
+  Main view rendered at "/".
+
+  Renders Logs if user is logged in. Otherwise renders Splash page.
+
+ */
+
 import React from 'react';
+import { browserHistory } from 'react-router';
 import { frontCopy } from '../res/config.jsx';
-export default () => (
-  <div>
-    <h1>Anylog</h1>
-    {frontCopy}
-  </div>
-);
+
+export default class Home extends React.Component {
+
+  componentDidMount() {
+    const { store } = this.context;
+    this.unsubscribe = store.subscribe(() =>
+       this.forceUpdate()
+    );
+  }
+
+  componentWillMount() {
+    const user = this.context.store.getState().user;
+    if (user.isLoggedIn) {
+      browserHistory.push('/logs');
+    }
+  }
+
+  componentWillUpdate() {
+    const user = this.context.store.getState().user;
+    if (user.isLoggedIn) {
+      browserHistory.push('/logs');
+    }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Anylog</h1>
+        {frontCopy}
+      </div>
+    );
+  }
+}
+
+Home.contextTypes = {
+  store: React.PropTypes.object,
+};

@@ -1,39 +1,23 @@
 import React from 'react';
+import CreateAccountForm from './CreateAccountForm';
+import { Col } from 'react-bootstrap';
+import { createAccount } from '../actions';
 
-import {
-  ControlLabel,
-  FormGroup,
-  FormControl,
-  Button,
-  Col,
-} from 'react-bootstrap';
+export default class CreateAccount extends React.Component {
 
-export default () => (
-  <div>
-    <Col md={4} mdOffset={4}>
-      <h3>Create Account</h3>
-      <br />
-      <form>
-        <FormGroup controlId="login-email">
-          <ControlLabel srOnly>Email address</ControlLabel>
-          <FormControl
-            type="email"
-            placeholder="Email address"
-            required
-          />
-        </FormGroup>
-        <FormGroup controlId="login-password">
-          <ControlLabel srOnly>Password</ControlLabel>
-          <FormControl
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </FormGroup>
-        <Button type="submit" bsStyle="primary" block>
-          Create account
-        </Button>
-      </form>
-    </Col>
-  </div>
-);
+  createAccountHandler = (username, email, password) => (
+    createAccount(username, email, password)(this.context.store.dispatch)
+  )
+
+  render() {
+    return (
+      <Col md={4} mdOffset={4}>
+        <CreateAccountForm createAccountHandler={this.createAccountHandler} />
+      </Col>
+    );
+  }
+}
+
+CreateAccount.contextTypes = {
+  store: React.PropTypes.object,
+};

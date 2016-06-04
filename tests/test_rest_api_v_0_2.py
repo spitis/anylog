@@ -2,6 +2,7 @@ from flask import Flask
 import unittest
 import json
 import base64
+from sqlalchemy.engine.url import URL
 
 API_PREFIX = '/api/v0.2'
 
@@ -14,6 +15,15 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
     def setUp(self):
         app.config['DB_NAME'] = 'anylog_test'
         app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = \
+            URL(
+                drivername=app.config['DB_DRIVER'],
+                host=app.config['DB_HOST'],
+                port=app.config['DB_PORT'],
+                username=app.config['DB_USER'],
+                password=app.config['DB_PASS'],
+                database=app.config['DB_NAME']
+            )
 
         self.client = app.test_client()
         db.app = app
@@ -215,6 +225,22 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         )
 
         assert(res.status_code != 200)
+
+    def test_login(self):
+        user = User.query.first()
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/login',
+            method='GET',
+            username=user.username,
+            password="password",
+            data=None
+        )
+
+        resJson = json.loads(res.data.decode('utf-8'))
+        assert(res.status_code == 200)
+        assert(resJson['token'])
+        assert(resJson['username'] == user.username)
 
 if __name__ == '__main__':
     unittest.main()
