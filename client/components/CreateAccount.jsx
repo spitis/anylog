@@ -5,9 +5,15 @@ import { createAccount } from '../actions';
 
 export default class CreateAccount extends React.Component {
 
-  createAccountHandler = (username, email, password) => (
-    createAccount(username, email, password)(this.context.store.dispatch)
-  )
+  createAccountHandler = (e) => {
+    e.preventDefault();
+    const { username, email, password } = this.context.store.getState().form.createAccount;
+    createAccount(
+      username.value,
+      email.value,
+      password.value
+    )(this.context.store.dispatch);
+  }
 
   render() {
     return (

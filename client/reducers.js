@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 import {
   ADD_LOG_ATTEMPT,
@@ -103,6 +104,7 @@ function user(state = userDefaultState, action) {
 const app = combineReducers({
   user,
   logs,
+  form: formReducer,
 });
 
 export default app;

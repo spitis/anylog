@@ -20,6 +20,19 @@ export const FETCH_LOGS_ATTEMPT = 'FETCH_LOGS_ATTEMPT';
 export const FETCH_LOGS_RESULT = 'FETCH_LOGS_RESULT';
 
 /*
+ * DISPATCH REDIRECT HELPER
+ */
+
+export function redirectAfterAction(actionCreator, redirectUrl) {
+  return (dispatch, ...args) => {
+    dispatch(
+      actionCreator(...args)
+    );
+    browserHistory.push(redirectUrl);
+  };
+}
+
+/*
  * action creators
  */
 
@@ -28,7 +41,6 @@ export function loginError(error) {
 }
 
 export function loginSuccess(responseJson) {
-  browserHistory.push('/logs');
   return {
     token: responseJson.token,
     username: responseJson.username,
@@ -36,14 +48,17 @@ export function loginSuccess(responseJson) {
   };
 }
 
+export const loginSuccessRedirect = redirectAfterAction(loginSuccess, '/logs');
+
 export function loginRequest() {
   return { type: LOGIN_ATTEMPT };
 }
 
 export function logout() {
-  browserHistory.push('/');
   return { type: LOGOUT };
 }
+
+export const logoutRedirect = redirectAfterAction(logout, '/');
 
 export function createAccountError(error) {
   return { error, type: CREATE_ACCOUNT_FAILED };
@@ -66,6 +81,8 @@ export function addLogError(error) {
 export function addLogSuccess() {
   return { error: null, type: ADD_LOG_RESULT };
 }
+
+export const addLogSuccessRedirect = redirectAfterAction(addLogSuccess, '/logs');
 
 export function fetchLogsRequest() {
   return { type: FETCH_LOGS_ATTEMPT };
@@ -103,8 +120,9 @@ export function login(usernameOrEmail, password) {
     }, error => {
        // TODO
     })
-    .then((responseJson) => dispatch(loginSuccess(responseJson)
-    ), error => {
+    .then(
+      (responseJson) => loginSuccessRedirect(dispatch, responseJson)
+    , error => {
         // TODO
     });
   };
@@ -145,27 +163,71 @@ export function createAccount(username, email, password) {
 export function addLog(authToken, eventName, ...args) {
   return dispatch => {
     dispatch(addLogRequest());
-    fetch('http://localhost:3334/api/v0.2/user', {
+    const argdict = {};
+    for (let i = 0; i < args.length; i++) {
+      argdict[args[i][0]] = args[i][1];
+    }
+    fetch('http://localhost:3334/api/v0.2/logs', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(`${authToken}:a`)}`,
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
       },
       body: JSON.stringify({
         event_name: eventName,
-        ...args,
+        ...argdict,
       }),
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        dispatch(addLogSuccess());
+        return addLogSuccessRedirect(dispatch);
       }
       const error = new Error(response.statusText);
       error.response = response;
       dispatch(addLogError(error));
       throw error;
     }, error => {
-       // TODO
+      // TODO catch any other errors?
+
+    })
+    .catch(error => {
+      // TODO catch any other errors?
+      if (error.response.status === 401) {
+        logoutRedirect(dispatch);
+      }
     });
+  };
+}
+
+export function fetchLogs(authToken) {
+  return dispatch => {
+    dispatch(fetchLogsRequest());
+    fetch('http://localhost:3334/api/v0.2/logs', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      dispatch(addLogError(error));
+      throw error;
+    }, error => {
+      // TODO catch any errors?
+    })
+    .then(
+      responseJson => dispatch(
+        fetchLogsSuccess(responseJson && responseJson.logs)
+      ), error => {
+        // TODO catch any other errors?
+        if (error.response.status === 401) {
+          logoutRedirect(dispatch);
+        }
+      });
   };
 }

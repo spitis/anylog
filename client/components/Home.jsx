@@ -14,13 +14,8 @@ export default class Home extends React.Component {
 
   componentDidMount() {
     const { store } = this.context;
-    this.unsubscribe = store.subscribe(() =>
-       this.forceUpdate()
-    );
-  }
-
-  componentWillMount() {
-    const user = this.context.store.getState().user;
+    this.unsubscribe = store.subscribe(this.handleStoreChange.bind(this));
+    const user = store.getState().user;
     if (user.isLoggedIn) {
       browserHistory.push('/logs');
     }
@@ -35,12 +30,17 @@ export default class Home extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscribe = null;
+  }
+
+  handleStoreChange() {
+    if (!this.unsubscribe) return;
+    this.forceUpdate();
   }
 
   render() {
     return (
       <div>
-        <h1>Anylog</h1>
         {frontCopy}
       </div>
     );

@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router';
 import { appName } from '../res/config.jsx';
 
-import { login, logout } from '../actions';
+import { login, logoutRedirect } from '../actions';
 
 import LoginDropdown from './LoginDropdown.jsx';
 import LoggedInDropdown from './LoggedInDropdown.jsx';
@@ -26,10 +26,17 @@ export default class Navigation extends React.Component {
     this.unsubscribe();
   }
 
-  loginHandler = (usernameOrEmail, password) => (
-    login(usernameOrEmail, password)(this.context.store.dispatch)
-  )
-  logoutHandler = () => (this.context.store.dispatch(logout()))
+  loginHandler = (e) => {
+    e.preventDefault();
+    const { usernameOrEmail, password } = this.context.store.getState()
+      .form.login;
+    login(
+      usernameOrEmail.value,
+      password.value,
+    )(this.context.store.dispatch);
+  }
+
+  logoutHandler = () => (logoutRedirect(this.context.store.dispatch))
 
   render() {
     const user = this.context.store.getState().user;

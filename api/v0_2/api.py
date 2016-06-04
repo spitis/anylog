@@ -193,7 +193,7 @@ def logs():
         cols = Log.__table__.columns
         res = [row_to_json(row, cols) for row in query.all()]
 
-        return str(res), 200
+        return jsonify({'logs': res}), 200
 
 def row_to_json(row, cols):
     """
@@ -213,4 +213,4 @@ def row_to_json(row, cols):
             d[c.name] = str()
         else:
             d[c.name] = v
-    return json.dumps(d)
+    return d
