@@ -13,6 +13,12 @@ export const CREATE_ACCOUNT_ATTEMPT = 'CREATE_ACCOUNT_ATTEMPT';
 export const CREATE_ACCOUNT_FAILED = 'CREATE_ACCOUNT_FAILED';
 export const CREATE_ACCOUNT_SUCCESSFUL = LOGIN_SUCCESSFUL;
 
+export const ADD_LOG_ATTEMPT = 'ADD_LOG_ATTEMPT';
+export const ADD_LOG_RESULT = 'ADD_LOG_RESULT';
+
+export const FETCH_LOGS_ATTEMPT = 'FETCH_LOGS_ATTEMPT';
+export const FETCH_LOGS_RESULT = 'FETCH_LOGS_RESULT';
+
 /*
  * action creators
  */
@@ -47,6 +53,30 @@ export const createAccountSuccess = loginSuccess;
 
 export function createAccountRequest() {
   return { type: CREATE_ACCOUNT_ATTEMPT };
+}
+
+export function addLogRequest() {
+  return { type: ADD_LOG_ATTEMPT };
+}
+
+export function addLogError(error) {
+  return { error, type: ADD_LOG_RESULT };
+}
+
+export function addLogSuccess() {
+  return { error: null, type: ADD_LOG_RESULT };
+}
+
+export function fetchLogsRequest() {
+  return { type: FETCH_LOGS_ATTEMPT };
+}
+
+export function fetchLogsError(error) {
+  return { error, logs: [], type: FETCH_LOGS_RESULT };
+}
+
+export function fetchLogsSuccess(logs) {
+  return { error: null, logs, type: FETCH_LOGS_RESULT };
 }
 
 /*
@@ -108,6 +138,34 @@ export function createAccount(username, email, password) {
     .then((responseJson) => dispatch(createAccountSuccess(responseJson)
     ), error => {
         // TODO
+    });
+  };
+}
+
+export function addLog(authToken, eventName, ...args) {
+  return dispatch => {
+    dispatch(addLogRequest());
+    fetch('http://localhost:3334/api/v0.2/user', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${authToken}:a`)}`,
+      },
+      body: JSON.stringify({
+        event_name: eventName,
+        ...args,
+      }),
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(addLogSuccess());
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      dispatch(addLogError(error));
+      throw error;
+    }, error => {
+       // TODO
     });
   };
 }

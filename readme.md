@@ -1,4 +1,4 @@
 Anylog
 ------
 
-A simple personal debug log.
+A personal debug log.

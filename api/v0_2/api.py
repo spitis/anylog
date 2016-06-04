@@ -144,7 +144,6 @@ def logs():
         except Exception as e:
             return 'Improper request. Check documentation and try again.', 400
 
-        print(json)
         try:
             log = Log(**json)
             db.session.add(log)
@@ -167,10 +166,8 @@ def logs():
 
         if len(args):
             try:
-                print(args)
                 getEventsSchema(args)
-            except Exception as e:
-                print(e)
+            except Exception:
                 return "Invalid use of API. Check documentation.", 400
 
         query = Log.query.filter_by(user_id = g.user.id).\
