@@ -4,13 +4,14 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'client'),
-  build: path.join(__dirname, 'build'),
+  build: path.join(__dirname, 'static'),
 };
 
 module.exports = {
   devtool: 'source-map',
   output: {
     path: PATHS.build,
+    publicPath: 'static',
     filename: 'bundle.js',
   },
   entry: {
@@ -20,7 +21,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx'],
   },
   plugins: [
-    new CleanPlugin('build'),
+    new CleanPlugin('static'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.MinChunkSizePlugin({

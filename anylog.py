@@ -8,7 +8,7 @@
 
 """
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 import sqlalchemy as sa
 from sqlalchemy.engine.url import URL
@@ -105,6 +105,10 @@ app.register_blueprint(api, url_prefix='/api/v0.2')
     APP LAUNCH
 
 """
+
+@app.route('/')
+def indexRoute():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(port=3334, debug=app.config['DEBUG'])

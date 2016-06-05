@@ -7,6 +7,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Ubuntu:400,700" !defaul
 
 @import "_bootstrap";
 
+
 // Navbar =====================================================================
 
 .navbar {
@@ -14,6 +15,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Ubuntu:400,700" !defaul
   &-default {
 
     .badge {
+
       background-color: #fff;
       color: $navbar-default-bg;
     }

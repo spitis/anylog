@@ -3,12 +3,13 @@ const webpack = require('webpack');
 
 const PATHS = {
   src: path.join(__dirname, 'client'),
-  build: path.join(__dirname, 'build'),
+  build: path.join(__dirname, 'static'),
 };
 
 module.exports = {
   output: {
     path: PATHS.build,
+    publicPath: 'static',
     filename: 'bundle.js',
   },
   entry: {
