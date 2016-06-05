@@ -1,9 +1,11 @@
 # PYTHON
 sudo add-apt-repository -y ppa:fkrull/deadsnakes
 sudo apt-get -y update
-sudo apt-get -y install python3.5 python3.5-dev
+sudo apt-get -y install python3.5 python3.5-dev python2.7-dev
+sudo apt-get -y install uwsgi
 sudo apt-get -y install python-virtualenv
 sudo apt-get -y install python-psycopg2
+sudo apt-get -y install nginx
 
 # POSTGRES
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
