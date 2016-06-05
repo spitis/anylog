@@ -103,7 +103,7 @@ export function fetchLogsSuccess(logs) {
 export function login(usernameOrEmail, password) {
   return dispatch => {
     dispatch(loginRequest());
-    fetch(`${GLOBAL.API_ROOT}/login`, {
+    fetch(GLOBAL.API_ROOT + '/login', {
       method: 'get',
       headers: {
         Authorization: `Basic ${btoa(`${usernameOrEmail}:${password}`)}`,

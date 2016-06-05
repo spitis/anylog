@@ -5,10 +5,11 @@ __pycache__/
 # Node/Webpack
 node_modules/
 build/
+static/
 
 # Other
 old/
 .coverage
 htmlcov/
 anylogenv/
-
+*.save
