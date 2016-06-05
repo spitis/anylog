@@ -4,7 +4,7 @@ __pycache__/
 
 # Node/Webpack
 node_modules/
-build/bundle.js
+build/
 
 # Other
 old/
