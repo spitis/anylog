@@ -103,7 +103,7 @@ export function fetchLogsSuccess(logs) {
 export function login(usernameOrEmail, password) {
   return dispatch => {
     dispatch(loginRequest());
-    fetch('http://localhost:3334/api/v0.2/login', {
+    fetch(`${GLOBAL.API_ROOT}/login`, {
       method: 'get',
       headers: {
         Authorization: `Basic ${btoa(`${usernameOrEmail}:${password}`)}`,
@@ -131,7 +131,7 @@ export function login(usernameOrEmail, password) {
 export function createAccount(username, email, password) {
   return dispatch => {
     dispatch(createAccountRequest());
-    fetch('http://localhost:3334/api/v0.2/user', {
+    fetch(`${GLOBAL.API_ROOT}/user`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export function addLog(authToken, eventName, ...args) {
     for (let i = 0; i < args.length; i++) {
       argdict[args[i][0]] = args[i][1];
     }
-    fetch('http://localhost:3334/api/v0.2/logs', {
+    fetch(`${GLOBAL.API_ROOT}/logs`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ export function addLog(authToken, eventName, ...args) {
 export function fetchLogs(authToken) {
   return dispatch => {
     dispatch(fetchLogsRequest());
-    fetch('http://localhost:3334/api/v0.2/logs', {
+    fetch(`${GLOBAL.API_ROOT}/logs`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

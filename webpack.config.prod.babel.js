@@ -21,6 +21,9 @@ module.exports = {
     extensions: ['', '.js', '.jsx'],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'GLOBAL.API_ROOT': 'http://anylog.xyz:3334/api/v0.2',
+    }),
     new CleanPlugin('static'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),

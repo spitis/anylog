@@ -12,6 +12,11 @@ module.exports = {
     publicPath: 'static',
     filename: 'bundle.js',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'GLOBAL.API_ROOT': 'http://localhost:3334/api/v0.2',
+    }),
+  ],
   entry: {
     src: PATHS.src,
   },
