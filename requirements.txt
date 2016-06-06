@@ -9,3 +9,4 @@ coverage==4.1
 itsdangerous==0.24
 flask-cors==2.1.2
 uwsgi
+plivo
