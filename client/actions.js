@@ -64,7 +64,7 @@ export function createAccountError(error) {
   return { error, type: CREATE_ACCOUNT_FAILED };
 }
 
-export const createAccountSuccess = loginSuccess;
+export const createAccountSuccessRedirect = loginSuccessRedirect;
 
 export function createAccountRequest() {
   return { type: CREATE_ACCOUNT_ATTEMPT };
@@ -153,8 +153,9 @@ export function createAccount(username, email, password) {
     }, error => {
        // TODO
     })
-    .then((responseJson) => dispatch(createAccountSuccess(responseJson)
-    ), error => {
+    .then(
+      (responseJson) => createAccountSuccessRedirect(dispatch, responseJson)
+    , error => {
         // TODO
     });
   };

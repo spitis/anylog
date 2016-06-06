@@ -32,11 +32,11 @@ def insert_user():
         u = User(username, email, password)
         db.session.add(u)
         db.session.commit()
-        token = u.generate_auth_token(600)
+        token = u.generate_auth_token(86400)
         return jsonify({
             'username': u.username,
             'token': token.decode('ascii'),
-            'duration': 600
+            'duration': 86400
         }), 200
     except Exception:
         return "Must provide valid username, email and password.", 400
@@ -48,11 +48,11 @@ def login():
     GET:
         If authorized, returns an authentication token.
     """
-    token = g.user.generate_auth_token(600)
+    token = g.user.generate_auth_token(86400)
     return jsonify({
         'username': g.user.username,
         'token': token.decode('ascii'),
-        'duration': 600
+        'duration': 86400
     }), 200
 
 @api.route('/user/<string:username>', methods=['POST'])

@@ -4,6 +4,7 @@ import App from './components/App';
 import Home from './components/Home';
 import Logs from './components/Logs';
 import AddLog from './components/AddLog';
+import Dashboard from './components/Dashboard';
 import Page404 from './components/Page404';
 import CreateAccount from './components/CreateAccount';
 
@@ -26,6 +27,7 @@ export default (store) => (
     <Route path="/createaccount" component={CreateAccount} />
     <Route path="/logs" component={Logs} />
     <Route path="/addLog" component={AddLog} />
+    <Route path="/dashboard" component={Dashboard} />
     <Route path="*" component={Page404} />
   </Route>
 );

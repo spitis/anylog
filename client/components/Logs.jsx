@@ -4,8 +4,10 @@ import {
   Row,
   Col,
   Button,
+  Table,
 } from 'react-bootstrap';
 import { browserHistory } from 'react-router';
+import '../styles/logs.scss';
 
 function stringify(stringOrJSON) {
   if (typeof stringOrJSON === 'object') {
@@ -59,7 +61,6 @@ function exportJSONtoCSV(JSONData, labels, filename) {
   document.body.removeChild(link);
 }
 
-
 export default class Logs extends React.Component {
   componentDidMount() {
     const { store } = this.context;
@@ -98,33 +99,38 @@ export default class Logs extends React.Component {
             <Button onClick={this.export(logs)}>Export</Button>&nbsp;
             <Button onClick={this.addLog}>Add Log</Button>
           </span>
-
         </h1>
         <hr />
-        <Row style={{ fontSize: '1.5em' }}>
-          <Col sm={3}>Timestamp</Col>
-          <Col sm={3}>Event</Col>
-          <Col sm={6}>Description</Col>
-        </Row>
-        {logs.map((log, i) =>
-          <Log
-            key={i}
-            timestamp={log.timestamp}
-            eventName={log.event_name}
-            eventText={log.event_json && log.event_json.text}
-          />
-        )}
+        <Table responsive striped condensed>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Event</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log, i) =>
+              <Log
+                key={i}
+                timestamp={(new Date(log.timestamp)).toLocaleString()}
+                eventName={log.event_name}
+                eventText={log.event_json && log.event_json.text}
+              />
+            )}
+          </tbody>
+        </Table>
       </div>
     );
   }
 }
 
 const Log = (props) => (
-  <Row>
-    <Col sm={3}>{props.timestamp}</Col>
-    <Col sm={3}>{props.eventName}</Col>
-    <Col sm={6}>{props.eventText}</Col>
-  </Row>
+  <tr>
+    <td>{props.timestamp}</td>
+    <td>{props.eventName}</td>
+    <td>{props.eventText}</td>
+  </tr>
 );
 
 Logs.contextTypes = {

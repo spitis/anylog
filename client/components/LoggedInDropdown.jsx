@@ -7,6 +7,8 @@ import {
   Glyphicon,
 } from 'react-bootstrap';
 
+import { LinkContainer } from 'react-router-bootstrap';
+
 const LoggedInDropdown = (props) => {
   const title = <span><Glyphicon glyph="cog" /> {props.user.username}</span>;
   return (
@@ -14,8 +16,15 @@ const LoggedInDropdown = (props) => {
       title={title}
       id="login-navdropdown"
     >
-      <MenuItem onClick={() => null}>Account</MenuItem>
-      <MenuItem onClick={() => null}>Data sources</MenuItem>
+      <LinkContainer to={{ pathname: '/dashboard' }}>
+        <MenuItem>Dashboard</MenuItem>
+      </LinkContainer>
+      <LinkContainer to={{ pathname: '/account' }}>
+        <MenuItem>Account</MenuItem>
+      </LinkContainer>
+      <LinkContainer to={{ pathname: '/sources' }}>
+        <MenuItem>Data sources</MenuItem>
+      </LinkContainer>
       <MenuItem divider />
       <MenuItem onClick={props.logoutHandler}>Logout</MenuItem>
     </NavDropdown>

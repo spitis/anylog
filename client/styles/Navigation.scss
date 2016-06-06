@@ -1,3 +1,15 @@
+@media(max-width:768px) {
+
+  .navbar-collapse > ul {
+    display: none;
+  }
+
+  .navbar-collapse.in > ul {
+    display: block;
+  }
+}
+
+
 .no-transition {
   -webkit-transition: height 0.01s;
   -moz-transition: height 0.01s;
