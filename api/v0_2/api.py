@@ -6,8 +6,26 @@ from api.models import User, Log, db
 from api.basicAuth import requires_auth, authenticate
 from api.schemas import userSchema, newEventSchema, getEventsSchema
 import json
+import plivo, plivoxml
 
 api = Blueprint('api',__name__)
+
+@api.route('/receive_sms', methods=['POST'])
+def receive_sms():
+    # Sender's phone numer
+    from_number = request.values.get('From')
+    # Receiver's phone number - Plivo number
+    to_number = request.values.get('To')
+    # The text which was received
+    text = request.values.get('Text')
+
+    # Save message to user
+    user = User.query.filter_by(username="test").first()
+    log = Log(user, text)
+    db.session.add(log)
+    db.session.commit()
+
+    return "Message received, {0}, {1}, {2}".format(from_number, to_number, text), 200
 
 @api.route('/user', methods=['POST'])
 def insert_user():
