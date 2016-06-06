@@ -1,10 +1,12 @@
 import React from 'react';
-import '../styles/bootswatch.scss';
 import '../styles/Navigation.scss';
 import {
   Navbar,
   Nav,
+  NavItem,
+  Glyphicon,
 } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router';
 import { appName } from '../res/config.jsx';
 
@@ -12,6 +14,7 @@ import { login, logoutRedirect } from '../actions';
 
 import LoginDropdown from './LoginDropdown.jsx';
 import LoggedInDropdown from './LoggedInDropdown.jsx';
+import LoggedInOnly from './LoggedInOnly';
 
 export default class Navigation extends React.Component {
 
@@ -54,18 +57,26 @@ export default class Navigation extends React.Component {
       <Navbar className="navbar">
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={brandLink}>{appName}</Link>
+            <Link to={brandLink} className="title-font">{appName}</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse className="no-transition">
-          {/*
-            <Nav className="nav navbar-nav">
-              <NavItem className="active" eventKey={1} href="#home">Home</NavItem>
-              <NavItem eventKey={2} href="#about">Blog</NavItem>
-            </Nav>
-          */}
-          <Nav pullRight>
+          <Nav pullRight className="nav navbar-nav">
+            <LoggedInOnly>
+              <LinkContainer to={{ pathname: '/logs' }}>
+                <NavItem onClick={e => e.target.blur()} eventKey={1}>
+                  <Glyphicon glyph="list" /> Logs
+                </NavItem>
+              </LinkContainer>
+            </LoggedInOnly>
+            <LoggedInOnly>
+              <LinkContainer to={{ pathname: '/addLog' }}>
+                <NavItem onClick={e => e.target.blur()} eventKey={2}>
+                  <Glyphicon glyph="plus" /> Add
+                </NavItem>
+              </LinkContainer>
+            </LoggedInOnly>
             {rightMenu}
           </Nav>
         </Navbar.Collapse>

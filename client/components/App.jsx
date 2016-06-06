@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from './Navigation.jsx';
-import '../styles/bootswatch.scss';
+import '../styles/anylog.scss';
 
 export default (props) => (
   <div>

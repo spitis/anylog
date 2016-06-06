@@ -23,7 +23,10 @@ from api.models import db
 """
 
 app = Flask(__name__)
-CORS(app)
+
+#CORS FOR DEVELOPMENT ONLY
+if __name__ == "__main__":
+    CORS(app)
 
 app.config.update(dict(
     DEBUG=True,
@@ -107,7 +110,8 @@ app.register_blueprint(api, url_prefix='/api/v0.2')
 """
 
 @app.route('/')
-def indexRoute():
+@app.route('/<path:path>')
+def indexRoute(path=None):
     return render_template('index.html')
 
 if __name__ == "__main__":

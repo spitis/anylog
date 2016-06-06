@@ -8,7 +8,7 @@ API_PREFIX = '/api/v0.2'
 
 import sqlalchemy as sa
 from anylog import app, db
-from api.models import User
+from api.models import User, Log
 
 class Anylog_REST_API_Test_Case(unittest.TestCase):
 
@@ -186,12 +186,68 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
 
         assert(res.status_code != 200)
 
+        #change password back
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
             method='POST',
             username=user.username,
             password="PASSWORD",
+            data = json.dumps(dict(
+                username="test",
+                password="password"
+            ))
+        )
+
+        #Try to modify different user fails
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/user/wrongusername',
+            method='POST',
+            username=user.username,
+            password="password",
+            data = json.dumps(dict(
+                username="test",
+                password="password"
+            ))
+        )
+
+        assert(res.status_code == 401)
+
+        #Invalid JSON fails
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/user/' + user.username,
+            method='POST',
+            username=user.username,
+            password="password",
+            data = "{this_is_not_json: 'nope}"
+        )
+
+        assert(res.status_code == 400)
+
+        #Improper JSON fails (i.e. does not fit user schema)
+
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/user/' + user.username,
+            method='POST',
+            username=user.username,
+            password="password",
+            data = json.dumps(dict(
+                username="test",
+                password="pass"
+            ))
+        )
+
+        assert(res.status_code == 400)
+
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/user/' + user.username,
+            method='POST',
+            username=user.username,
+            password="password",
             data = json.dumps(dict(
                 username="testtest"
             ))
@@ -205,7 +261,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             url= API_PREFIX + '/user/' + user.username,
             method='POST',
             username=user.username,
-            password="PASSWORD",
+            password="password",
             data = json.dumps(dict(
                 active=False
             ))
@@ -218,7 +274,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             url= API_PREFIX + '/user/' + user.username,
             method='POST',
             username=user.username,
-            password="PASSWORD",
+            password="password",
             data = json.dumps(dict(
                 username="testtest"
             ))
@@ -241,6 +297,188 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         assert(res.status_code == 200)
         assert(resJson['token'])
         assert(resJson['username'] == user.username)
+
+    def test_post_logs_URL(self):
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random_event',
+            method='POST',
+            username=user.username,
+            password="password",
+            data=None
+        )
+
+        log = Log.query.first()
+
+        assert(log.event_name == 'random_event')
+
+        db.session.delete(log)
+        db.session.commit()
+
+
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random&event_tags=a,b&event_text=cooltext&namespace=custom2',
+            method='POST',
+            username=user.username,
+            password="password",
+            data=None
+        )
+
+        log = Log.query.first()
+
+        assert('a' in log.event_tags)
+        assert('b' in log.event_tags)
+        assert(log.event_json.get('text') == 'cooltext')
+        assert(log.namespace == 'custom2')
+
+    def test_post_logs_JSON(self):
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs',
+            method='POST',
+            username=user.username,
+            password="password",
+            data=json.dumps(dict(
+                event_name="random_event"
+            ))
+        )
+
+        log = Log.query.first()
+
+        assert(log.event_name == 'random_event')
+
+        db.session.delete(log)
+        db.session.commit()
+
+
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs',
+            method='POST',
+            username=user.username,
+            password="password",
+            data=json.dumps(dict(
+                event_name="random",
+                event_tags=["a","b"],
+                event_json={"text": "cooltext"},
+                namespace="custom2",
+            ))
+        )
+
+        log = Log.query.first()
+
+        assert('a' in log.event_tags)
+        assert('b' in log.event_tags)
+        assert(log.event_json.get('text') == 'cooltext')
+        assert(log.namespace == 'custom2')
+
+    def test_post_logs_URL_vs_JSON(self):
+        user = User.query.first()
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=coolevent&event_text=urltext',
+            method='POST',
+            username=user.username,
+            password="password",
+            data=json.dumps(dict(
+                event_tags=["a","b"],
+                event_json={"text": "cooltext"},
+                namespace="custom2",
+            ))
+        )
+
+        log = Log.query.first()
+
+        assert(log.event_name == 'coolevent')
+        assert('a' in log.event_tags)
+        assert('b' in log.event_tags)
+        assert(log.event_json.get('text') == 'cooltext')
+        assert(log.namespace == 'custom2')
+
+    def test_get_logs(self):
+        username = User.query.first().username
+        self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random_event',
+            method='POST',
+            username=username,
+            password="password",
+            data=None
+        )
+        self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random&event_tags=a,b&event_text=cooltext&namespace=custom2',
+            method='POST',
+            username=username,
+            password="password",
+            data=None
+        )
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs',
+            method='GET',
+            username=username,
+            password="password",
+            data=None
+        )
+
+        res = json.loads(res.data.decode('utf-8'))['logs']
+        assert(len(res) == 2)
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random',
+            method='GET',
+            username=username,
+            password="password",
+            data=None
+        )
+
+        res = json.loads(res.data.decode('utf-8'))['logs']
+        assert(len(res) == 1)
+        assert("a" in res[0]["event_tags"])
+        assert("b" in res[0]["event_tags"])
+        assert(res[0]["event_json"]["text"] == "cooltext")
+        assert(res[0]["namespace"] == "custom2")
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random_event',
+            method='GET',
+            username=username,
+            password="password",
+            data=None
+        )
+
+        res = json.loads(res.data.decode('utf-8'))['logs']
+        assert(len(res) == 1)
+        assert(res[0]["event_name"] == "random_event")
+
+    def test_logs_requires_auth(self):
+        username = User.query.first().username
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random_event',
+            method='POST',
+            username=username,
+            password="password2",
+            data=None
+        )
+
+        assert(res.status_code == 401)
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs',
+            method='GET',
+            username=username,
+            password="password2",
+            data=None
+        )
+
+        assert(res.status_code == 401)
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs?event_name=random',
+            method='GET',
+            username=username,
+            password="password",
+            data=None
+        )
 
 if __name__ == '__main__':
     unittest.main()

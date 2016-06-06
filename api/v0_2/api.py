@@ -9,10 +9,6 @@ import json
 
 api = Blueprint('api',__name__)
 
-@api.route('/', methods=['GET'])
-def hello():
-    return "Welcome to Anylog v0.2!"
-
 @api.route('/user', methods=['POST'])
 def insert_user():
     """
@@ -68,8 +64,8 @@ def modify_user(username):
     """
     if username != g.user.username:
         return authenticate()
-    json = request.get_json(force=True, silent=True)
 
+    json = request.get_json(force=True, silent=True)
     if not json:
         return 'Request is not valid JSON.', 400
 

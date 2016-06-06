@@ -4,16 +4,23 @@ import '../styles/LoginDropdown.scss';
 import {
   NavDropdown,
   MenuItem,
+  Glyphicon,
 } from 'react-bootstrap';
 
-const LoggedInDropdown = (props) => (
-  <NavDropdown
-    title={props.user.username}
-    id="login-navdropdown"
-  >
-    <MenuItem onClick={props.logoutHandler}>Logout</MenuItem>
-  </NavDropdown>
-);
+const LoggedInDropdown = (props) => {
+  const title = <span><Glyphicon glyph="cog" /> {props.user.username}</span>;
+  return (
+    <NavDropdown
+      title={title}
+      id="login-navdropdown"
+    >
+      <MenuItem onClick={() => null}>Account</MenuItem>
+      <MenuItem onClick={() => null}>Data sources</MenuItem>
+      <MenuItem divider />
+      <MenuItem onClick={props.logoutHandler}>Logout</MenuItem>
+    </NavDropdown>
+  );
+};
 
 LoggedInDropdown.propTypes = {
   user: React.PropTypes.object,

@@ -5,3 +5,27 @@
   -o-transition: height 0.01s;
   transition: height 0.01s;
 }
+
+
+.nav {
+  font-size: 1.2em;
+
+  li>a {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .glyphicon {
+    position: relative;
+    top: 3px;
+    margin-right: 4px;
+  }
+}
+
+.navbar-header {
+  .title-font{
+    font-size: 2.2em;
+    position: relative;
+    top: 4px;
+  }
+}

@@ -14,7 +14,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'GLOBAL.API_ROOT': 'http://localhost:3334/api/v0.2',
+      'GLOBAL.API_ROOT': JSON.stringify('http://localhost:3334/api/v0.2'),
     }),
   ],
   entry: {

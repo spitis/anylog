@@ -1,6 +1,6 @@
 import React from 'react';
 
-const appName = 'Anylog';
+const appName = 'anylog';
 const frontCopy = (
   <div>
     <br />
