@@ -23,10 +23,7 @@ from api.models import db
 """
 
 app = Flask(__name__)
-
-#CORS FOR DEVELOPMENT ONLY
-if __name__ == "__main__":
-    CORS(app)
+CORS(app)
 
 app.config.update(dict(
     DEBUG=True,
