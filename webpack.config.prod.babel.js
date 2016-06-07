@@ -12,7 +12,7 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: PATHS.build,
-    publicPath: 'static',
+    publicPath: 'static/',
     filename: 'bundle.js',
   },
   entry: {

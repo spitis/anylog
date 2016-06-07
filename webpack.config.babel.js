@@ -10,7 +10,7 @@ const PATHS = {
 module.exports = {
   output: {
     path: PATHS.build,
-    publicPath: 'static',
+    publicPath: 'static/',
     filename: 'bundle.js',
   },
   plugins: [
