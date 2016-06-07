@@ -6,6 +6,7 @@ from api.models import User, Log, db
 from api.basicAuth import requires_auth, authenticate
 from api.schemas import userSchema, newEventSchema, getEventsSchema
 import json
+import plivo
 
 api = Blueprint('api',__name__)
 
