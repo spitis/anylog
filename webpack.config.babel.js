@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const PATHS = {
   src: path.join(__dirname, 'client'),
   build: path.join(__dirname, 'static'),
+  webroot: 'http://localhost:3334',
 };
 
 module.exports = {
@@ -14,7 +15,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'GLOBAL.API_ROOT': JSON.stringify('http://localhost:3334/api/v0.2'),
+      'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
     }),
   ],
   entry: {
@@ -22,6 +23,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
+  },
+  sassLoader: {
+    data: `$staticpath: "${PATHS.webroot}/static";`,
   },
   module: {
     loaders: [

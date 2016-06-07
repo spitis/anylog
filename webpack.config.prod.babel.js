@@ -5,6 +5,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 const PATHS = {
   src: path.join(__dirname, 'client'),
   build: path.join(__dirname, 'static'),
+  webroot: 'https://anylog.xyz',
 };
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'GLOBAL.API_ROOT': JSON.stringify('https://anylog.xyz/api/v0.2'),
+      'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
     }),
     new CleanPlugin('static'),
     new webpack.optimize.DedupePlugin(),
@@ -42,6 +43,9 @@ module.exports = {
       },
     }),
   ],
+  sassLoader: {
+    data: `$staticpath: "${PATHS.webroot}/static";`,
+  },
   module: {
     loaders: [
       {
