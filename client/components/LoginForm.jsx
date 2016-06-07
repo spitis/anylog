@@ -11,6 +11,10 @@ import {
 
 class loginForm extends React.Component {
 
+  handleTouchEnd = () => {
+    this.refs.form.getDOMNode().dispatchEvent(new Event('submit'));
+  }
+
   render() {
     const {
       fields: { usernameOrEmail, password },
@@ -53,8 +57,7 @@ class loginForm extends React.Component {
           </div>
           <Button
             type="submit"
-            onTouchEnd={this.refs.form.getDOMNode()
-                        .dispatchEvent(new Event('submit'))}
+            onTouchEnd={this.handleTouchEnd}
             bsStyle="primary"
             block
           >

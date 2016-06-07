@@ -10,6 +10,10 @@ import {
 
 class createAccountForm extends React.Component {
 
+  handleTouchEnd = () => {
+    this.refs.form.getDOMNode().dispatchEvent(new Event('submit'));
+  }
+
   render() {
     const {
       fields: { username, email, password },
@@ -47,8 +51,7 @@ class createAccountForm extends React.Component {
             />
           </FormGroup>
           <Button
-            onTouchEnd={this.refs.form.getDOMNode()
-                        .dispatchEvent(new Event('submit'))}
+            onTouchEnd={this.handleTouchEnd}
             type="submit"
             bsStyle="primary"
             block
