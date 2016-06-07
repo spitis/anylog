@@ -23,7 +23,7 @@ const loginForm = (props) => {
 
   return (
     <div id="login-dp">
-      <form onSubmit={loginHandler}>
+      <form onSubmit={loginHandler} ref="form">
         <FormGroup controlId="login-email">
           <ControlLabel srOnly>Username or Email</ControlLabel>
           <FormControl
@@ -51,6 +51,8 @@ const loginForm = (props) => {
         </div>
         <Button
           type="submit"
+          onTouchEnd={this.refs.form.getDOMNode()
+                      .dispatchEvent(new Event('submit'))}
           bsStyle="primary"
           block
         >

@@ -19,7 +19,7 @@ const addLogForm = (props) => {
 
   return (
     <div>
-      <form onSubmit={addLogHandler}>
+      <form onSubmit={addLogHandler} ref="form">
         <FormGroup controlId="addLog-eventName">
           <ControlLabel>Event Name</ControlLabel>
           <FormControl
@@ -37,7 +37,13 @@ const addLogForm = (props) => {
             placeholder="Optional"
           />
         </FormGroup>
-        <Button type="submit" bsStyle="primary" block>
+        <Button
+          onTouchEnd={this.refs.form.getDOMNode()
+                      .dispatchEvent(new Event('submit'))}
+          type="submit"
+          bsStyle="primary"
+          block
+        >
           Add log
         </Button>
       </form>

@@ -13,7 +13,7 @@ const createAccountForm = (props) => {
 
   return (
     <div>
-      <form onSubmit={createAccountHandler}>
+      <form onSubmit={createAccountHandler} ref="form">
         <FormGroup controlId="login-username">
           <ControlLabel srOnly>Username</ControlLabel>
           <FormControl
@@ -41,7 +41,13 @@ const createAccountForm = (props) => {
             required
           />
         </FormGroup>
-        <Button type="submit" bsStyle="primary" block>
+        <Button
+          onTouchEnd={this.refs.form.getDOMNode()
+                      .dispatchEvent(new Event('submit'))}
+          type="submit"
+          bsStyle="primary"
+          block
+        >
           Create account
         </Button>
       </form>

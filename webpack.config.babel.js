@@ -24,9 +24,6 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
-  sassLoader: {
-    data: `$staticpath: "${PATHS.webroot}/static";`,
-  },
   module: {
     loaders: [
       {

@@ -43,9 +43,6 @@ module.exports = {
       },
     }),
   ],
-  sassLoader: {
-    data: `$staticpath: "${PATHS.webroot}/static";`,
-  },
   module: {
     loaders: [
       {
