@@ -22,7 +22,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'GLOBAL.API_ROOT': JSON.stringify('http://anylog.xyz/api/v0.2'),
+      'GLOBAL.API_ROOT': JSON.stringify('https://anylog.xyz/api/v0.2'),
     }),
     new CleanPlugin('static'),
     new webpack.optimize.DedupePlugin(),
