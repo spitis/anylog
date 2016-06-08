@@ -10,3 +10,4 @@ itsdangerous==0.24
 flask-cors==2.1.2
 uwsgi
 plivo
+flask-migrate==1.8.0

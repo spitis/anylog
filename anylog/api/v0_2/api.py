@@ -2,9 +2,9 @@
 
 from flask import Blueprint, request, abort, g, jsonify
 from sqlalchemy import or_
-from api.models import User, Log, db
-from api.basicAuth import requires_auth, authenticate
-from api.schemas import userSchema, newEventSchema, getEventsSchema
+from anylog.api.models import User, Log, db
+from anylog.api.basicAuth import requires_auth, authenticate
+from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema
 import json
 import plivo, plivoxml
 

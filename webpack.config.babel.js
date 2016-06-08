@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const PATHS = {
   src: path.join(__dirname, 'client'),
-  build: path.join(__dirname, 'static'),
+  build: path.join(__dirname, 'anylog/static'),
   webroot: 'http://localhost:3334',
 };
 

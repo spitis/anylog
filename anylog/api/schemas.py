@@ -1,5 +1,5 @@
 import re
-from api.models import EMAIL_REGEX
+from anylog.api.models import EMAIL_REGEX
 from voluptuous import Schema, Required, Invalid, All, Length
 
 def Email(msg=None):

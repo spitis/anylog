@@ -4,7 +4,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'client'),
-  build: path.join(__dirname, 'static'),
+  build: path.join(__dirname, 'anylog/static'),
   webroot: 'https://anylog.xyz',
 };
 

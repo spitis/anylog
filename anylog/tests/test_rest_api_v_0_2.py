@@ -8,7 +8,7 @@ API_PREFIX = '/api/v0.2'
 
 import sqlalchemy as sa
 from anylog import app, db
-from api.models import User, Log
+from anylog.api.models import User, Log
 
 class Anylog_REST_API_Test_Case(unittest.TestCase):
 

@@ -13,8 +13,8 @@ from flask_cors import CORS
 import sqlalchemy as sa
 from sqlalchemy.engine.url import URL
 
-from api.v0_2.api import api
-from api.models import db
+from .api.v0_2.api import api
+from .api.models import db
 
 """
 

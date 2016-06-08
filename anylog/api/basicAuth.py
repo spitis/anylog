@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, Response, g
-from api.models import User
+from anylog.api.models import User
 from sqlalchemy import or_
 
 def check_auth(username_email_or_token, password):
