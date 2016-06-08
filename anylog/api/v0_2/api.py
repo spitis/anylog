@@ -21,7 +21,7 @@ def receive_sms():
 
     # Save message to user
     user = User.query.filter_by(username="test").first()
-    log = Log(user, from_number)
+    log = Log(user, str(from_number))
     db.session.add(log)
     db.session.commit()
 
