@@ -1,11 +1,12 @@
-import anylog
-
+from flask import Flask
+from anylog import app, db
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-migrate = Migrate(anylog.app, anylog.db)
-manager = Manager(anylog.app)
+migrate = Migrate(app, db)
+manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+
 
 if __name__ == '__main__':
     manager.run()

@@ -40,14 +40,14 @@ app.config.update(dict(
 ))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
-    URL(
+    str(URL(
         drivername=app.config['DB_DRIVER'],
         host=app.config['DB_HOST'],
         port=app.config['DB_PORT'],
         username=app.config['DB_USER'],
         password=app.config['DB_PASS'],
         database=app.config['DB_NAME']
-    )
+    ))
 
 app.config.from_envvar('ANYLOG_SETTINGS', silent=True)
 
