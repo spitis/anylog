@@ -3,13 +3,16 @@ from flask import request, Response, g
 from anylog.api.models import User
 from sqlalchemy import or_
 
-def check_auth(username_email_or_token, password):
+def check_auth(username_email_or_token, password, allow_token=True):
     """
     Check if user is authenticated.
     Injects user into g object.
     """
+    user = None
+    
     #Check if valid token
-    user = User.verify_auth_token(username_email_or_token)
+    if allow_token:
+        user = User.verify_auth_token(username_email_or_token)
 
     if user and not user.active:
         return False
@@ -40,6 +43,16 @@ def requires_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
+
+def requires_password_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username,\
+         auth.password, allow_token=False):
             return authenticate()
         return f(*args, **kwargs)
     return decorated

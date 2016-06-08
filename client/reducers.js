@@ -57,7 +57,11 @@ const userDefaultState = {
   isLoggedIn: false,
   loginError: null,
   loginToken: null,
+
+  // PROFILE INFO
   username: null,
+  email: null,
+  sms_number: null,
 };
 
 function user(state = userDefaultState, action) {

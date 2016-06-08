@@ -22,7 +22,8 @@ userSchema = Schema({
     'username': All(str, Length(min=4), NotEmail()),
     'password': All(str, Length(min=8)),
     'email': All(str, Email()),
-    'active': bool
+    'active': bool,
+    'sms_number': int
 })
 
 newEventSchema = Schema({

@@ -19,6 +19,12 @@ export const ADD_LOG_RESULT = 'ADD_LOG_RESULT';
 export const FETCH_LOGS_ATTEMPT = 'FETCH_LOGS_ATTEMPT';
 export const FETCH_LOGS_RESULT = 'FETCH_LOGS_RESULT';
 
+export const UPDATE_PROFILE_ATTEMPT = 'UPDATE_LOG_ATTEMPT';
+export const UPDATE_PROFILE_RESULT = 'UPDATE_PROFILE_RESULT';
+
+export const FETCH_PROFILE_ATTEMPT = 'FETCH_PROFILE_ATTEMPT';
+export const FETCH_PROFILE_RESULT = 'FETCH_PROFILE_RESULT';
+
 /*
  * DISPATCH REDIRECT HELPER
  */
@@ -96,6 +102,27 @@ export function fetchLogsSuccess(logs) {
   return { error: null, logs, type: FETCH_LOGS_RESULT };
 }
 
+export function updateProfileRequest() {
+  return { type: UPDATE_PROFILE_ATTEMPT };
+}
+export function updateProfileError(error) {
+  return { error, type: UPDATE_PROFILE_RESULT };
+}
+export function updateProfileSuccess(profile) {
+  return { error: null, profile, type: UPDATE_PROFILE_RESULT,
+  };
+}
+
+export function fetchProfileRequest() {
+  return { type: FETCH_PROFILE_ATTEMPT };
+}
+export function fetchProfileError(error) {
+  return { error, type: UPDATE_PROFILE_RESULT };
+}
+export function fetchProfileSuccess(profile) {
+  return { error: null, profile, type: FETCH_PROFILE_RESULT };
+}
+
 /*
  * api callers
  */
@@ -103,7 +130,7 @@ export function fetchLogsSuccess(logs) {
 export function login(usernameOrEmail, password) {
   return dispatch => {
     dispatch(loginRequest());
-    fetch(GLOBAL.API_ROOT + '/login', {
+    fetch(`${GLOBAL.API_ROOT}/login`, {
       method: 'get',
       headers: {
         Authorization: `Basic ${btoa(`${usernameOrEmail}:${password}`)}`,
@@ -224,6 +251,79 @@ export function fetchLogs(authToken) {
     .then(
       responseJson => dispatch(
         fetchLogsSuccess(responseJson && responseJson.logs)
+      ), error => {
+        // TODO catch any other errors?
+        if (error.response.status === 401) {
+          logoutRedirect(dispatch);
+        }
+      });
+  };
+}
+
+export function fetchProfile(authToken, username) {
+  return dispatch => {
+    dispatch(fetchProfileRequest());
+    fetch(`${GLOBAL.API_ROOT}/user/${username}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      dispatch(fetchProfileError(error));
+      throw error;
+    }, error => {
+      // TODO catch any errors?
+    })
+    .then(
+      responseJson => dispatch(
+        fetchProfileSuccess(responseJson && responseJson.profile)
+      ), error => {
+        // TODO catch any other errors?
+        if (error.response.status === 401) {
+          logoutRedirect(dispatch);
+        }
+      });
+  };
+}
+
+export function updateProfile(username, password, ...args) {
+  return dispatch => {
+    dispatch(updateProfileRequest());
+    const argdict = {};
+    for (let i = 0; i < args.length; i++) {
+      argdict[args[i][0]] = args[i][1];
+    }
+    fetch(`${GLOBAL.API_ROOT}/user/${username}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+      },
+      body: JSON.stringify({
+        ...argdict,
+      }),
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      dispatch(updateProfileError(error));
+      throw error;
+    }, error => {
+      // TODO catch any errors?
+    })
+    .then(
+      responseJson => dispatch(
+        updateProfileSuccess(responseJson && responseJson.profile)
       ), error => {
         // TODO catch any other errors?
         if (error.response.status === 401) {

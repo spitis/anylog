@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY, BIGINT
 from itsdangerous import (TimedJSONWebSignatureSerializer,\
     BadSignature, SignatureExpired)
 db = SQLAlchemy()
@@ -25,7 +25,7 @@ class User(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     username = db.Column('username', db.String, nullable=False, unique=True)
     email = db.Column('email', db.String, nullable=False, unique=True)
-    sms_number = db.Column('sms_number', db.Integer, unique=True)
+    sms_number = db.Column('sms_number', BIGINT, unique=True)
     password = db.Column('password', db.String, nullable=False)
     active = db.Column('active', db.Boolean)
 

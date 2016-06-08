@@ -128,7 +128,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
 
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -143,24 +143,26 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
                 username="test",
                 email="test2@test2.com",
-                password="password"
+                password="password",
+                sms_number = 3233234444
             ))
         )
 
         assert(res.status_code == 200)
         assert(User.query.first().email == "test2@test2.com")
+        assert(User.query.first().sms_number == 3233234444)
 
         user = User.query.first()
         pw_orig = user.password
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -175,7 +177,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -190,7 +192,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="PASSWORD",
             data = json.dumps(dict(
@@ -203,7 +205,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/wrongusername',
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -218,7 +220,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = "{this_is_not_json: 'nope}"
@@ -231,7 +233,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -245,7 +247,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -259,7 +261,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(
@@ -272,7 +274,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/user/' + user.username,
-            method='POST',
+            method='PUT',
             username=user.username,
             password="password",
             data = json.dumps(dict(

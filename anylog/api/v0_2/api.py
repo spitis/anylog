@@ -3,7 +3,7 @@
 from flask import Blueprint, request, abort, g, jsonify
 from sqlalchemy import or_
 from anylog.api.models import User, Log, db
-from anylog.api.basicAuth import requires_auth, authenticate
+from anylog.api.basicAuth import requires_auth, requires_password_auth, authenticate
 from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema
 import json
 import plivo, plivoxml
@@ -76,11 +76,28 @@ def login():
         'duration': 86400
     }), 200
 
-@api.route('/user/<string:username>', methods=['POST'])
+@api.route('/user/<string:username>', methods=['GET'])
 @requires_auth
-def modify_user(username):
+def get_user(username):
     """
-    POST:
+    GET:
+        Fetches a user's profile.
+    """
+    if username != g.user.username:
+        return authenticate()
+
+    res = dict(
+        username = g.user.username,
+        email = g.user.email,
+        sms_number = g.user.sms_number
+    )
+    return jsonify({'profile': res}), 200
+
+@api.route('/user/<string:username>', methods=['PUT'])
+@requires_password_auth
+def put_user(username):
+    """
+    PUT:
         Changes an attribute of the user.
     """
     if username != g.user.username:
@@ -102,7 +119,14 @@ def modify_user(username):
             else:
                 setattr(g.user, i, json[i])
         db.session.commit()
-        return '', 200
+
+        res = dict(
+            username = g.user.username,
+            email = g.user.email,
+            sms_number = g.user.sms_number
+        )
+        return jsonify({'profile': res}), 200
+        
     except Exception as e:
         return str(e), 400
 
