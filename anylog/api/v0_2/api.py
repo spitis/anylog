@@ -20,15 +20,12 @@ def receive_sms():
     text = request.values.get('Text')
 
     # Save message to user
-    user = User.query.filter_by(username="test").first()
+    user = User.query.filter_by(sms_number=int(from_number)).first()
     log = Log(user, text)
     db.session.add(log)
     db.session.commit()
 
-    with open('log.txt','w') as f:
-        f.write("Message received, {0}, {1}, {2}".format(from_number, to_number, text))
-
-    return "Message received, {0}, {1}, {2}".format(from_number, to_number, text), 200
+    return '', 200
 
 @api.route('/user', methods=['POST'])
 def insert_user():
