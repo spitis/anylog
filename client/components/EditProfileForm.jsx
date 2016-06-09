@@ -10,14 +10,21 @@ import {
 
 const editProfileForm = (props) => {
   const {
-    fields: { username, email, password },
+    fields: { username, email, password, smsNumber, oldPassword },
     editProfileHandler,
+    errorMessage,
   } = props;
+
+  let error;
+  if (errorMessage) {
+    error = <div className="form-error">{errorMessage}</div>;
+  }
 
   return (
     <div>
+      {error}
       <form onSubmit={editProfileHandler}>
-        <FormGroup controlId="login-username">
+        <FormGroup controlId="editProfile-username">
           <ControlLabel>Username</ControlLabel>
           <FormControl
             {...username}
@@ -26,7 +33,7 @@ const editProfileForm = (props) => {
             required
           />
         </FormGroup>
-        <FormGroup controlId="login-email">
+        <FormGroup controlId="editProfile-email">
           <ControlLabel>Email address</ControlLabel>
           <FormControl
             {...email}
@@ -35,31 +42,53 @@ const editProfileForm = (props) => {
             required
           />
         </FormGroup>
-        <FormGroup controlId="login-password">
-          <ControlLabel>Password</ControlLabel>
+        <FormGroup controlId="editProfile-sms">
+          <ControlLabel>SMS Number</ControlLabel>
+          <FormControl
+            {...smsNumber}
+            type="text"
+            placeholder="SMS Number"
+          />
+        </FormGroup>
+        <FormGroup controlId="editProfile-password">
+          <ControlLabel>New Password</ControlLabel>
           <FormControl
             {...password}
             type="password"
-            placeholder="Password"
+            placeholder="New Password"
+          />
+        </FormGroup>
+        <FormGroup controlId="editProfile-oldPassword">
+          <ControlLabel>Please re-enter your password to make any changes:</ControlLabel>
+          <FormControl
+            {...oldPassword}
+            type="password"
+            placeholder="Old Password"
             required
           />
         </FormGroup>
         <Button type="submit" bsStyle="primary" block>
-          Create account
+          Update Profile
         </Button>
       </form>
     </div>
   );
 };
 
-const EditProfileForm = reduxForm({
-  form: 'createAccount',
-  fields: ['username', 'email', 'password'],
-})(editProfileForm);
+const EditProfileForm = reduxForm(
+  {
+    form: 'editProfile',
+    fields: ['username', 'email', 'smsNumber', 'password', 'oldPassword'],
+  },
+  state => ({ // mapStateToProps
+    initialValues: state.user,
+  })
+)(editProfileForm);
 
 export default EditProfileForm;
 
 editProfileForm.propTypes = {
   editProfileHandler: React.PropTypes.func,
   fields: React.PropTypes.object,
+  errorMessage: React.PropTypes.string,
 };

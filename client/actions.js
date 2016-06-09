@@ -4,6 +4,8 @@ import { browserHistory } from 'react-router';
  * action types
  */
 
+export const CLEAR_ERROR = 'CLEAR_ERROR';
+
 export const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGIN_SUCCESSFUL = 'LOGIN_SUCCESSFUL';
@@ -20,7 +22,8 @@ export const FETCH_LOGS_ATTEMPT = 'FETCH_LOGS_ATTEMPT';
 export const FETCH_LOGS_RESULT = 'FETCH_LOGS_RESULT';
 
 export const UPDATE_PROFILE_ATTEMPT = 'UPDATE_LOG_ATTEMPT';
-export const UPDATE_PROFILE_RESULT = 'UPDATE_PROFILE_RESULT';
+export const UPDATE_PROFILE_FAILED = 'UPDATE_PROFILE_FAILED';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
 
 export const FETCH_PROFILE_ATTEMPT = 'FETCH_PROFILE_ATTEMPT';
 export const FETCH_PROFILE_RESULT = 'FETCH_PROFILE_RESULT';
@@ -41,6 +44,10 @@ export function redirectAfterAction(actionCreator, redirectUrl) {
 /*
  * action creators
  */
+
+export function clearError(errorName) {
+  return { errorName, type: CLEAR_ERROR };
+}
 
 export function loginError(error) {
   return { error, type: LOGIN_FAILED };
@@ -106,10 +113,10 @@ export function updateProfileRequest() {
   return { type: UPDATE_PROFILE_ATTEMPT };
 }
 export function updateProfileError(error) {
-  return { error, type: UPDATE_PROFILE_RESULT };
+  return { error, type: UPDATE_PROFILE_FAILED };
 }
 export function updateProfileSuccess(profile) {
-  return { error: null, profile, type: UPDATE_PROFILE_RESULT,
+  return { profile, type: UPDATE_PROFILE_SUCCESS,
   };
 }
 
@@ -117,7 +124,7 @@ export function fetchProfileRequest() {
   return { type: FETCH_PROFILE_ATTEMPT };
 }
 export function fetchProfileError(error) {
-  return { error, type: UPDATE_PROFILE_RESULT };
+  return { error, type: FETCH_PROFILE_RESULT };
 }
 export function fetchProfileSuccess(profile) {
   return { error: null, profile, type: FETCH_PROFILE_RESULT };
@@ -138,19 +145,20 @@ export function login(usernameOrEmail, password) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return response.json();
+        response.json().then(
+          resJson => loginSuccessRedirect(dispatch, resJson)
+        );
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(loginError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(loginError(error));
-      throw error;
     }, error => {
        // TODO
-    })
-    .then(
-      (responseJson) => loginSuccessRedirect(dispatch, responseJson)
-    , error => {
-        // TODO
     });
   };
 }
@@ -171,19 +179,20 @@ export function createAccount(username, email, password) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return response.json();
+        response.json().then(
+          resJson => createAccountSuccessRedirect(dispatch, responseJson)
+        );
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(createAccountError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(createAccountError(error));
-      throw error;
     }, error => {
        // TODO
-    })
-    .then(
-      (responseJson) => createAccountSuccessRedirect(dispatch, responseJson)
-    , error => {
-        // TODO
     });
   };
 }
@@ -209,20 +218,19 @@ export function addLog(authToken, eventName, ...args) {
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
         return addLogSuccessRedirect(dispatch);
+      } else if (response.stats === 401) {
+        logoutRedirect(dispatch);
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(addLogError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(addLogError(error));
-      throw error;
     }, error => {
       // TODO catch any other errors?
-
-    })
-    .catch(error => {
-      // TODO catch any other errors?
-      if (error.response.status === 401) {
-        logoutRedirect(dispatch);
-      }
     });
   };
 }
@@ -239,24 +247,25 @@ export function fetchLogs(authToken) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return response.json();
+        response.json().then(
+          resJson => dispatch(
+            fetchLogsSuccess(resJson && resJson.logs)
+          )
+        );
+      } else if (response.stats === 401) {
+        logoutRedirect(dispatch);
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(addLogError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(addLogError(error));
-      throw error;
     }, error => {
       // TODO catch any errors?
-    })
-    .then(
-      responseJson => dispatch(
-        fetchLogsSuccess(responseJson && responseJson.logs)
-      ), error => {
-        // TODO catch any other errors?
-        if (error.response.status === 401) {
-          logoutRedirect(dispatch);
-        }
-      });
+    });
   };
 }
 
@@ -272,39 +281,38 @@ export function fetchProfile(authToken, username) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return response.json();
+        response.json().then(
+          resJson => dispatch(
+            fetchProfileSuccess(resJson && resJson.profile)
+          )
+        );
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(fetchProfileError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(fetchProfileError(error));
-      throw error;
     }, error => {
       // TODO catch any errors?
-    })
-    .then(
-      responseJson => dispatch(
-        fetchProfileSuccess(responseJson && responseJson.profile)
-      ), error => {
-        // TODO catch any other errors?
-        if (error.response.status === 401) {
-          logoutRedirect(dispatch);
-        }
-      });
+    });
   };
 }
 
-export function updateProfile(username, password, ...args) {
+export function updateProfile(oldUsername, oldPassword, ...args) {
   return dispatch => {
     dispatch(updateProfileRequest());
     const argdict = {};
     for (let i = 0; i < args.length; i++) {
       argdict[args[i][0]] = args[i][1];
     }
-    fetch(`${GLOBAL.API_ROOT}/user/${username}`, {
+    fetch(`${GLOBAL.API_ROOT}/user/${oldUsername}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+        Authorization: `Basic ${btoa(`${oldUsername}:${oldPassword}`)}`,
       },
       body: JSON.stringify({
         ...argdict,
@@ -312,23 +320,22 @@ export function updateProfile(username, password, ...args) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return response.json();
+        response.json().then(
+          resJson => dispatch(
+            updateProfileSuccess(resJson && resJson.profile)
+          )
+        );
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(updateProfileError(error));
+          }
+        );
       }
-      const error = new Error(response.statusText);
-      error.response = response;
-      dispatch(updateProfileError(error));
-      throw error;
     }, error => {
       // TODO catch any errors?
-    })
-    .then(
-      responseJson => dispatch(
-        updateProfileSuccess(responseJson && responseJson.profile)
-      ), error => {
-        // TODO catch any other errors?
-        if (error.response.status === 401) {
-          logoutRedirect(dispatch);
-        }
-      });
+    });
   };
 }

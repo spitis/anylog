@@ -43,11 +43,13 @@ def insert_user():
     email = json.get('email')
     password = json.get('password')
     if (username is None) or (email is None) or (password is None):
-        return "Must provide valid username, email and password.", 400
-    if User.query.filter_by(username=username).first() is not None:
-        return "User already exists.", 400
+        return jsonify({
+            'error': "Must provide valid username, email and password."
+        }), 400
     if User.query.filter(or_(User.username==username,User.email==email)).first() is not None:
-        return "Username or email already exists.", 400
+        return jsonify({
+            'error': "Username or email already exists."
+        }), 400
 
     try:
         u = User(username, email, password)
@@ -60,7 +62,9 @@ def insert_user():
             'duration': 86400
         }), 200
     except Exception:
-        return "Must provide valid username, email and password.", 400
+        return jsonify({
+            'error': "Must provide valid username, email and password."
+        }), 400
 
 @api.route('/login', methods=['GET'])
 @requires_auth
@@ -104,13 +108,18 @@ def put_user(username):
         return authenticate()
 
     json = request.get_json(force=True, silent=True)
+    print(json)
     if not json:
-        return 'Request is not valid JSON.', 400
+        return jsonify({
+            'error': 'Request is not valid JSON'
+        }), 400
 
     try:
         userSchema(json)
     except Exception as e:
-        return 'Improper request. Check documentation and try again.', 400
+        return jsonify({
+            'error': 'Improper request. Check documentation and try again.'
+        }), 400
 
     try:
         for i in list(json):
@@ -126,9 +135,11 @@ def put_user(username):
             sms_number = g.user.sms_number
         )
         return jsonify({'profile': res}), 200
-        
+
     except Exception as e:
-        return str(e), 400
+        return {
+            'error': 'unknown error'
+        }, 400
 
 @api.route('/logs', methods=['POST','GET'])
 @requires_auth
@@ -183,7 +194,9 @@ def logs():
         try:
             newEventSchema(json)
         except Exception as e:
-            return 'Improper request. Check documentation and try again.', 400
+            return jsonify({
+                'error': 'Improper request. Check documentation and try again.'
+            }), 400
 
         try:
             log = Log(**json)
@@ -191,7 +204,9 @@ def logs():
             db.session.commit()
             return '', 200
         except Exception as e:
-            return str(e), 400
+            return jsonify({
+                'error': 'unknown error'
+            }), 400
 
     elif request.method == 'GET':
         args = request.args.to_dict()
@@ -209,7 +224,9 @@ def logs():
             try:
                 getEventsSchema(args)
             except Exception:
-                return "Invalid use of API. Check documentation.", 400
+                return jsonify({
+                    'error': 'Improper request. Check documentation and try again.'
+                }), 400
 
         query = Log.query.filter_by(user_id = g.user.id).\
             order_by(Log.timestamp.desc())

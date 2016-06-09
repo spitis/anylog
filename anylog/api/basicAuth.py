@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, Response, g
+from flask import request, Response, g, jsonify
 from anylog.api.models import User
 from sqlalchemy import or_
 
@@ -9,7 +9,7 @@ def check_auth(username_email_or_token, password, allow_token=True):
     Injects user into g object.
     """
     user = None
-    
+
     #Check if valid token
     if allow_token:
         user = User.verify_auth_token(username_email_or_token)
@@ -33,10 +33,9 @@ def authenticate():
     """
     Sends a 401 response that enables basic auth
     """
-    return Response(
-    'Could not verify your access level for that URL.\n'
-    'You have to login with proper credentials', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+    return jsonify({
+        'error': 'Could not verify your access level for that URL.'
+    }), 401
 
 def requires_auth(f):
     @wraps(f)

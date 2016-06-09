@@ -6,13 +6,14 @@ import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
+import thunk from 'redux-thunk';
 import app from './reducers.js';
 
 import routes from './routes.js';
 
-let store = createStore(app, undefined, autoRehydrate());
+let store = createStore(app, applyMiddleware(thunk), autoRehydrate());
 persistStore(store, {}, loadApp);
 
 // FOR DEBUGGING

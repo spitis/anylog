@@ -19,7 +19,7 @@ const LoggedInDropdown = (props) => {
       <LinkContainer to={{ pathname: '/dashboard' }}>
         <MenuItem>Dashboard</MenuItem>
       </LinkContainer>
-      <LinkContainer to={{ pathname: '/account' }}>
+      <LinkContainer to={{ pathname: '/editProfile' }}>
         <MenuItem>Account</MenuItem>
       </LinkContainer>
       <LinkContainer to={{ pathname: '/sources' }}>
