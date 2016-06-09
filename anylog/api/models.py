@@ -29,6 +29,9 @@ class User(db.Model):
     password = db.Column('password', db.String, nullable=False)
     active = db.Column('active', db.Boolean)
 
+    sms_verified = db.Column('sms_verified', db.Boolean, default=False, server_default='f')
+    email_verified = db.Column('email_verified', db.Boolean, default=False, server_default='f')
+
     def __init__(self, username, email, password):
         """
         Inserts a new user into the database.
