@@ -12,3 +12,4 @@ old/
 htmlcov/
 anylogenv/
 *.save
+log.txt
