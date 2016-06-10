@@ -11,7 +11,6 @@
 import requests
 from flask import Flask, render_template
 from flask_cors import CORS
-from flask_mail import Mail
 import sqlalchemy as sa
 from sqlalchemy.engine.url import URL
 
@@ -41,7 +40,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 db.init_app(app)
 
 CORS(app)
-mail = Mail(app)
 
 """
 
@@ -57,7 +55,6 @@ app.register_blueprint(api, url_prefix='/api/v0.2')
 
 """
 
-from flask_mail import Message
 @app.route('/mailtosilviu')
 def mailtosilviu(mailto= ['silviu.pitis@gmail.com'], mailfrom=app.config['MAIL_DEFAULT_SENDER']):
     requests.post(
