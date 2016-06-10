@@ -66,7 +66,8 @@ def mailtosilviu(mailto= ['silviu.pitis@gmail.com'], mailfrom=app.config['MAIL_D
         data={"from": mailfrom,
               "to": mailto,
               "subject": "Hello",
-              "text": "Testing some Mailgun awesomness!"})
+              "html": render_template('email_confirm.html',
+                                confirmation_link='anylog.xyz')})
     return 'OK', 200
 
 @app.route('/')
