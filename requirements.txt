@@ -11,3 +11,4 @@ flask-cors==2.1.2
 uwsgi
 plivo
 flask-migrate==1.8.0
+flask-mail==0.9.1

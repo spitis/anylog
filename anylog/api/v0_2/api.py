@@ -105,7 +105,6 @@ def put_user(username):
         return authenticate()
 
     json = request.get_json(force=True, silent=True)
-    print(json)
     if not json:
         return jsonify({
             'error': 'Request is not valid JSON'

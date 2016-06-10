@@ -6,6 +6,10 @@ __pycache__/
 node_modules/
 anylog/static/
 
+# config
+anylog/config/prod.cfg
+anylog/config/dev.cfg
+
 # Other
 old/
 .coverage
@@ -13,3 +17,4 @@ htmlcov/
 anylogenv/
 *.save
 log.txt
+tmp/
