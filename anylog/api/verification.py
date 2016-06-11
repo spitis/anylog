@@ -84,6 +84,6 @@ def send_verification_sms():
     sms_number = g.user.sms_number
     token = generate_verification_token(sms_number)
     link = current_app.config['ROOT_URL'] + url_for('.verify_sms',token=token)
-    print(link)
-    message = "Anylog sms verification: " + shortener.short()
+    message = "Anylog sms verification: " + shortener.short(link)
     send_sms(sms_number, message)
+    return "Verification text sent!", 200

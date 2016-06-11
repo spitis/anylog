@@ -18,3 +18,4 @@ anylogenv/
 *.save
 log.txt
 tmp/
+*.log
