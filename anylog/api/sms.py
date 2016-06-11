@@ -15,8 +15,15 @@ def receive_sms():
 
     # Find user
     user = User.query.filter_by(sms_number=int(from_number)).first()
-
+    
+    with open('log.txt','w') as f:
+        f.write('hello')
+    
     if not user.sms_verified:
+        with open('log.txt','w') as f:
+            f.write(text.strip().lower())
+            f.write('\n')
+            f.write(user.username.lower())
         if text.strip().lower() is user.username.lower():
             user.sms_verified = True
             user.sms_verified_on = datetime.now()
