@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, request
 from anylog.api.models import User, Log, db
+from datetime import datetime
 import plivo
 
 sms = Blueprint('sms', __name__)
@@ -7,24 +8,23 @@ sms = Blueprint('sms', __name__)
 @sms.route('/receive_sms', methods=['POST'])
 def receive_sms():
     # Sender's phone numer
-    from_number = request.values.get('From')
+    from_number = int(request.values.get('From'))
     # Receiver's phone number - Plivo number
-    to_number = request.values.get('To')
+    to_number = int(request.values.get('To'))
     # The text which was received
-    text = request.values.get('Text')
+    text = str(request.values.get('Text'))
 
     # Find user
-    user = User.query.filter_by(sms_number=int(from_number)).first()
+    user = User.query.filter_by(sms_number=from_number).first()
     if not user:
         return "Invalid user", 400
-
+    
     if not user.sms_verified:
-        if text.strip().lower() is user.username.lower():
+        if text.strip().lower() == user.username.lower():
             user.sms_verified = True
             user.sms_verified_on = datetime.now()
             db.session.commit()
-            send_sms(to_number, "Congrats your number is verified! Anything\
-            you text to this number will now be logged.")
+            send_sms(to_number, "Congrats your number is verified! Anything you text to this number will now be logged.")
 
         #do not log anything
         return '', 200
