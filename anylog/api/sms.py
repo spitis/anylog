@@ -13,8 +13,19 @@ def receive_sms():
     # The text which was received
     text = request.values.get('Text')
 
-    # Save message to user
+    # Find user
     user = User.query.filter_by(sms_number=int(from_number)).first()
+
+    if not user.sms_verified:
+        if text == user.username:
+            user.sms_verified = True
+            user.sms_verified_on = datetime.now()
+            db.session.commit()
+
+        #do not log anything
+        return '', 200
+
+
     log = Log(user, text)
     db.session.add(log)
     db.session.commit()
@@ -28,7 +39,7 @@ def send_sms(to_number, text):
     params = {
         'src': '17077776191',
         'dst': str(to_number),
-        'text': text.decode('utf-8')
+        'text': text
     }
     res = p.send_message(params)
-    return str(response[0])
+    return str(res[0])
