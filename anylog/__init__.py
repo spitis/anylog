@@ -16,6 +16,8 @@ from sqlalchemy.engine.url import URL
 
 from .api.v0_2.api import api
 from .api.models import db
+from .api.verification import verification
+from .api.sms import sms
 
 """
 
@@ -48,24 +50,13 @@ CORS(app)
 """
 
 app.register_blueprint(api, url_prefix='/api/v0.2')
-
+app.register_blueprint(verification, url_prefix='/api/verify')
+app.register_blueprint(sms, url_prefix='/api/sms')
 """
 
     APP LAUNCH
 
 """
-
-@app.route('/mailtosilviu')
-def mailtosilviu(mailto= ['silviu.pitis@gmail.com'], mailfrom=app.config['MAIL_DEFAULT_SENDER']):
-    requests.post(
-        app.config['MAILGUN_BASE_URL']+"/messages",
-        auth=("api", app.config['MAILGUN_API_KEY']),
-        data={"from": mailfrom,
-              "to": mailto,
-              "subject": "Hello",
-              "html": render_template('email_confirm.html',
-                                confirmation_link='anylog.xyz')})
-    return 'OK', 200
 
 @app.route('/')
 @app.route('/<path:path>')

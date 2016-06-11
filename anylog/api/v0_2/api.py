@@ -10,23 +10,6 @@ import plivo, plivoxml
 
 api = Blueprint('api',__name__)
 
-@api.route('/receive_sms', methods=['POST'])
-def receive_sms():
-    # Sender's phone numer
-    from_number = request.values.get('From')
-    # Receiver's phone number - Plivo number
-    to_number = request.values.get('To')
-    # The text which was received
-    text = request.values.get('Text')
-
-    # Save message to user
-    user = User.query.filter_by(sms_number=int(from_number)).first()
-    log = Log(user, text)
-    db.session.add(log)
-    db.session.commit()
-
-    return '', 200
-
 @api.route('/user', methods=['POST'])
 def insert_user():
     """
