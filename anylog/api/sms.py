@@ -17,7 +17,7 @@ def receive_sms():
     user = User.query.filter_by(sms_number=int(from_number)).first()
 
     if not user.sms_verified:
-        if text == user.username:
+        if text.strip().lower() is user.username.lower():
             user.sms_verified = True
             user.sms_verified_on = datetime.now()
             db.session.commit()

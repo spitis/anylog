@@ -65,4 +65,4 @@ def send_verification_sms():
     sms_number = g.user.sms_number
 
     send_sms(sms_number, "To verify your number, reply to this text\
-        with your Anylog username."
+        with your Anylog username.")
