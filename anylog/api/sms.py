@@ -21,6 +21,8 @@ def receive_sms():
             user.sms_verified = True
             user.sms_verified_on = datetime.now()
             db.session.commit()
+            send_sms(to_number, "Congrats your number is verified! Anything\
+            you text to this number will now be logged.")
 
         #do not log anything
         return '', 200

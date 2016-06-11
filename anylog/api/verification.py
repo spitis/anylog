@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, g, current_app, render_template
 from anylog.api.models import User, db
 from datetime import datetime
 from anylog.api.basicAuth import requires_auth
+from anylog.api.sms import send_sms
 from itsdangerous import URLSafeTimedSerializer
 import requests
 
@@ -55,3 +56,13 @@ def send_verification_email():
               "html": render_template('email_confirm.html',
                         confirmation_link=link)})
     return 'Verification email sent!', 200
+
+@verification.route('/send_sms')
+@requires_auth
+def send_verification_sms():
+    if g.user.sms_verified:
+        return 'Aready verified.', 400
+    sms_number = g.user.sms_number
+
+    send_sms(sms_number, "To verify your number, reply to this text\
+        with your Anylog username."
