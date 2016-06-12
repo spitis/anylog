@@ -18,7 +18,7 @@ def log_by_email():
 
     with open('log.txt', 'w') as f:
         f.write("FROM: " + json.get('from') + "\n")
-        f.write("SUBJECT: ") + json.get('subject') + "\n")
+        f.write("SUBJECT: " + json.get('subject') + "\n")
         f.write("TEXT: " + json.get('stripped-text') + "\n")
         f.write("TIMESTAMP " + json.get('timestamp'))
 
