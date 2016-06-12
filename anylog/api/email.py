@@ -4,14 +4,10 @@ from datetime import datetime
 import hashlib, hmac
 
 def verify_mailgun(token, timestamp, signature):
-    try:
-        return signature == hmac.new(
-            key=current_app.config['MAILGUN_API_KEY'].encode('utf-8'),
-            msg='{}{}'.format(timestamp, token).encode('utf-8'),
-            digestmod=hashlib.sha256).hexdigest()
-    except Exception as e:
-        with open('log.txt','w') as f:
-            f.write(str(e))
+    return signature == hmac.new(
+        key=current_app.config['MAILGUN_API_KEY'].encode('utf-8'),
+        msg='{}{}'.format(timestamp, token).encode('utf-8'),
+        digestmod=hashlib.sha256).hexdigest()
 
 email = Blueprint('email', __name__)
 
@@ -21,20 +17,15 @@ def log_by_email():
             request.values.get('timestamp'),
             request.values.get('signature')):
         return 'Unauthorized', 401
-    with open('log3.txt', 'w') as f:
-        f.write('verified')    
 
     email = str(request.values.get('from'))
     email = email[email.find("<")+1:email.find(">")]
-    
-    with open('log.txt','w') as f:
-        f.write(email)    
-    
+
     # Find user
     user = User.query.filter_by(email=email).first()
     if not user:
         return "Invalid user", 400
-    
+
     if not user.email_verified:
         #do not log anything
         return 'Not verified', 400
