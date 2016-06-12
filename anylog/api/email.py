@@ -5,9 +5,9 @@ import hashlib, hmac
 
 def verify_mailgun(token, timestamp, signature):
     return signature == hmac.new(
-                             key=current_app.config['MAILGUN_API_KEY']),
-                             msg='{}{}'.format(timestamp, token),
-                             digestmod=hashlib.sha256).hexdigest()
+        key=current_app.config['MAILGUN_API_KEY']),
+        msg='{}{}'.format(timestamp, token),
+        digestmod=hashlib.sha256).hexdigest()
 
 
 email = Blueprint('email', __name__)
