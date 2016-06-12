@@ -12,11 +12,25 @@ import {
 export default class EditProfile extends React.Component {
 
   componentWillMount() {
-    const { loginToken, username } = this.context.store.getState().user;
+    const {
+      loginToken,
+      username,
+    } = this.context.store.getState().user;
+    let {
+      emailVerified,
+      smsVerified,
+    } = this.context.store.getState().user;
     this.context.store.dispatch(fetchProfile(loginToken, username));
     this.unsubscribe = this.context.store.subscribe(() => {
       const user = this.context.store.getState().user;
-      if (user.fetchProfileError) {
+
+      if (user.smsVerified && (!smsVerified)) {
+        smsVerified = true;
+        this.forceUpdate();
+      } else if (user.emailVerified && (!emailVerified)) {
+        emailVerified = true;
+        this.forceUpdate();
+      } else if (user.fetchProfileError) {
         this.errorMessage = user.fetchProfileError.error;
         this.forceUpdate();
       } else if (user.updateProfileError) {
