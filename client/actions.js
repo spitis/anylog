@@ -180,7 +180,7 @@ export function createAccount(username, email, password) {
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
         response.json().then(
-          resJson => createAccountSuccessRedirect(dispatch, responseJson)
+          resJson => createAccountSuccessRedirect(dispatch, resJson)
         );
       } else if (response.status >= 400 && response.status < 500) {
         const error = new Error(response.statusText);
