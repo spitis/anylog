@@ -18,6 +18,7 @@ from .api.v0_2.api import api
 from .api.models import db
 from .api.verification import verification
 from .api.sms import sms
+from .api.email import email
 
 """
 
@@ -52,6 +53,8 @@ CORS(app)
 app.register_blueprint(api, url_prefix='/api/v0.2')
 app.register_blueprint(verification, url_prefix='/api/verify')
 app.register_blueprint(sms, url_prefix='/api/sms')
+app.register_blueprint(email, url_prefix='/api/email')
+
 """
 
     APP LAUNCH
