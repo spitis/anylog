@@ -73,7 +73,9 @@ def get_user(username):
     res = dict(
         username = g.user.username,
         email = g.user.email,
-        sms_number = g.user.sms_number
+        sms_number = g.user.sms_number,
+        sms_verified = g.user.sms_verified,
+        email_verified = g.user.email_verified
     )
     return jsonify({'profile': res}), 200
 
@@ -104,6 +106,14 @@ def put_user(username):
         for i in list(json):
             if i == 'password':
                 g.user.change_password(json[i])
+            elif i == 'email':
+                setattr(g.user, 'email', json['email'])
+                setattr(g.user, 'email_verified', False)
+                setattr(g.user, 'email_verified_on', None)
+            elif i == 'sms_number':
+                setattr(g.user, 'sms_number', json['sms_number'])
+                setattr(g.user, 'sms_verified', False)
+                setattr(g.user, 'sms_verified_on', None)
             else:
                 setattr(g.user, i, json[i])
         db.session.commit()
@@ -111,7 +121,9 @@ def put_user(username):
         res = dict(
             username = g.user.username,
             email = g.user.email,
-            sms_number = g.user.sms_number
+            sms_number = g.user.sms_number,
+            sms_verified = g.user.sms_verified,
+            email_verified = g.user.email_verified
         )
         return jsonify({'profile': res}), 200
 

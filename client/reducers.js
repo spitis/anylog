@@ -80,7 +80,9 @@ const userDefaultState = {
   // PROFILE INFO
   username: null,
   email: null,
+  emailVerified: false,
   smsNumber: null,
+  smsVerified: false,
 };
 
 function user(state = userDefaultState, action) {
@@ -142,6 +144,8 @@ function user(state = userDefaultState, action) {
         username: action.profile.username,
         email: action.profile.email,
         smsNumber: action.profile.sms_number,
+        emailVerified: action.profile.email_verified,
+        smsVerified: action.profile.sms_verified,
       });
     case UPDATE_PROFILE_ATTEMPT:
       return Object.assign({}, state, {
@@ -159,6 +163,8 @@ function user(state = userDefaultState, action) {
         username: action.profile.username,
         email: action.profile.email,
         smsNumber: action.profile.sms_number,
+        emailVerified: action.profile.email_verified,
+        smsVerified: action.profile.sms_verified,
       });
     default:
       return state;

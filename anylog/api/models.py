@@ -28,8 +28,8 @@ class User(db.Model):
     sms_number = db.Column('sms_number', BIGINT, unique=True)
     password = db.Column('password', db.String, nullable=False)
     active = db.Column('active', db.Boolean)
-    registered_on = db.Column('registered_on', db.DateTime(timezone=True))
 
+    registered_on = db.Column('registered_on', db.DateTime(timezone=True))
     sms_verified = db.Column('sms_verified', db.Boolean, default=False, server_default='f')
     sms_verified_on = db.Column('sms_verified_on', db.DateTime(timezone=True))
     email_verified = db.Column('email_verified', db.Boolean, default=False, server_default='f')

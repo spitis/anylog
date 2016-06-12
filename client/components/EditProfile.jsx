@@ -1,7 +1,13 @@
 import React from 'react';
 import EditProfileForm from './EditProfileForm';
 import { Col } from 'react-bootstrap';
-import { fetchProfile, updateProfile, clearError } from '../actions';
+import {
+  fetchProfile,
+  updateProfile,
+  clearError,
+  sendVerificationEmail,
+  sendVerificationSms,
+} from '../actions';
 
 export default class EditProfile extends React.Component {
 
@@ -59,12 +65,31 @@ export default class EditProfile extends React.Component {
     );
   }
 
+  verifyEmailHandler = (e) => {
+    e.target.setAttribute('disabled', true);
+    e.target.innerHTML = 'Email sent!';
+    const token = this.context.store.getState().user.loginToken;
+    sendVerificationEmail(token);
+  }
+  verifySmsHandler = (e) => {
+    e.target.setAttribute('disabled', true);
+    e.target.innerHTML = 'Text sent!';
+    const token = this.context.store.getState().user.loginToken;
+    sendVerificationSms(token);
+  }
+
   render() {
+    const { smsVerified, emailVerified } = this.context.store.getState().user;
+
     return (
-      <Col md={6} mdOffset={3}>
+      <Col lg={8} lgOffset={2}>
         <EditProfileForm
           editProfileHandler={this.editProfileHandler}
           errorMessage={this.errorMessage}
+          smsVerified={smsVerified}
+          emailVerified={emailVerified}
+          verifySmsHandler={this.verifySmsHandler}
+          verifyEmailHandler={this.verifyEmailHandler}
         />
       </Col>
     );

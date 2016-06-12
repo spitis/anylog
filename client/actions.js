@@ -137,7 +137,7 @@ export function fetchProfileSuccess(profile) {
 export function login(usernameOrEmail, password) {
   return dispatch => {
     dispatch(loginRequest());
-    fetch(`${GLOBAL.API_ROOT}/login`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/login`, {
       method: 'get',
       headers: {
         Authorization: `Basic ${btoa(`${usernameOrEmail}:${password}`)}`,
@@ -166,7 +166,7 @@ export function login(usernameOrEmail, password) {
 export function createAccount(username, email, password) {
   return dispatch => {
     dispatch(createAccountRequest());
-    fetch(`${GLOBAL.API_ROOT}/user`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ export function addLog(authToken, eventName, ...args) {
     for (let i = 0; i < args.length; i++) {
       argdict[args[i][0]] = args[i][1];
     }
-    fetch(`${GLOBAL.API_ROOT}/logs`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/logs`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ export function addLog(authToken, eventName, ...args) {
 export function fetchLogs(authToken) {
   return dispatch => {
     dispatch(fetchLogsRequest());
-    fetch(`${GLOBAL.API_ROOT}/logs`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/logs`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -272,7 +272,7 @@ export function fetchLogs(authToken) {
 export function fetchProfile(authToken, username) {
   return dispatch => {
     dispatch(fetchProfileRequest());
-    fetch(`${GLOBAL.API_ROOT}/user/${username}`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/${username}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -308,7 +308,7 @@ export function updateProfile(oldUsername, oldPassword, ...args) {
     for (let i = 0; i < args.length; i++) {
       argdict[args[i][0]] = args[i][1];
     }
-    fetch(`${GLOBAL.API_ROOT}/user/${oldUsername}`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/${oldUsername}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -338,4 +338,22 @@ export function updateProfile(oldUsername, oldPassword, ...args) {
       // TODO catch any errors?
     });
   };
+}
+
+export function sendVerificationEmail(authToken) {
+  fetch(`${GLOBAL.API_ROOT}/verify/send_email`, {
+    method: 'get',
+    headers: {
+      Authorization: `Basic ${btoa(`${authToken}:`)}`,
+    },
+  });
+}
+
+export function sendVerificationSms(authToken) {
+  fetch(`${GLOBAL.API_ROOT}/verify/send_sms`, {
+    method: 'get',
+    headers: {
+      Authorization: `Basic ${btoa(`${authToken}:`)}`,
+    },
+  });
 }

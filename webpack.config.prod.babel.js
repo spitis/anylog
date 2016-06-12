@@ -23,7 +23,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
+      'GLOBAL.API_ROOT_VERSIONED': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
+      'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api`),
     }),
     new CleanPlugin('static'),
     new webpack.optimize.DedupePlugin(),
