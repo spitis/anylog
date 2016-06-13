@@ -18,7 +18,7 @@ def receive_sms():
     user = User.query.filter_by(sms_number=from_number).first()
     if not user:
         return "Invalid user", 400
-    
+
     if not user.sms_verified:
         if text.strip().lower() == user.username.lower():
             user.sms_verified = True
@@ -29,8 +29,14 @@ def receive_sms():
         #do not log anything
         return '', 200
 
+    text = text.split("::")
+    event_name = text[0]
+    if len(text) > 1:
+        event_text = "".join(text[1:]).strip()
 
-    log = Log(user, text)
+    log = Log(user, text, event_json=
+            {'text': event_text})
+    db.session.add(log))
     db.session.add(log)
     db.session.commit()
 

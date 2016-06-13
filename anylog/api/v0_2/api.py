@@ -107,13 +107,15 @@ def put_user(username):
             if i == 'password':
                 g.user.change_password(json[i])
             elif i == 'email':
-                setattr(g.user, 'email', json['email'])
-                setattr(g.user, 'email_verified', False)
-                setattr(g.user, 'email_verified_on', None)
+                if json['email'] !== g.user.email:
+                    setattr(g.user, 'email', json['email'])
+                    setattr(g.user, 'email_verified', False)
+                    setattr(g.user, 'email_verified_on', None)
             elif i == 'sms_number':
-                setattr(g.user, 'sms_number', json['sms_number'])
-                setattr(g.user, 'sms_verified', False)
-                setattr(g.user, 'sms_verified_on', None)
+                if json['sms_number'] !== g.user.sms_number:
+                    setattr(g.user, 'sms_number', json['sms_number'])
+                    setattr(g.user, 'sms_verified', False)
+                    setattr(g.user, 'sms_verified_on', None)
             else:
                 setattr(g.user, i, json[i])
         db.session.commit()
