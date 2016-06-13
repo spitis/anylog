@@ -29,8 +29,8 @@ def receive_sms():
         #do not log anything
         return '', 200
 
-    text = text.split("::")
-    event_name = text[0]
+    text = text.split("@@")
+    event_name = text[0].strip()
     if len(text) > 1:
         event_text = "".join(text[1:]).strip()
 
@@ -52,4 +52,4 @@ def send_sms(to_number, text):
         'text': text
     }
     res = p.send_message(params)
-    return str(res[0])
+    return '', 200

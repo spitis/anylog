@@ -13,6 +13,7 @@
   "license": "",
   "private": true,
   "devDependencies": {
+    "a11y": "^0.4.1",
     "babel-core": "^6.9.0",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.4",
@@ -25,6 +26,7 @@
     "eslint": "^2.11.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
+    "eslint-plugin-jsx": "0.0.2",
     "eslint-plugin-jsx-a11y": "^1.2.2",
     "eslint-plugin-react": "^5.1.1",
     "extract-text-webpack-plugin": "^1.0.1",

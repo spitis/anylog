@@ -1,13 +1,10 @@
 import React from 'react';
 import { fetchLogs } from '../actions';
 import {
-  Row,
-  Col,
   Button,
   Table,
 } from 'react-bootstrap';
-import { browserHistory } from 'react-router';
-import '../styles/logs.scss';
+import '../styles/Logs.scss';
 
 function stringify(stringOrJSON) {
   if (typeof stringOrJSON === 'object') {
@@ -79,10 +76,6 @@ export default class Logs extends React.Component {
     fetchLogs(authToken)(this.context.store.dispatch);
   }
 
-  addLog = () => {
-    browserHistory.push('/addLog');
-  }
-
   export = (logs) => () => {
     exportJSONtoCSV(logs, ['timestamp', 'event_name', 'event_json'], 'export');
   }
@@ -93,14 +86,12 @@ export default class Logs extends React.Component {
 
     return (
       <div>
-        <h1>Logs
+        <h2>
           <span style={{ float: 'right' }}>
             <Button onClick={this.fetchLogs}>Refresh</Button>&nbsp;
             <Button onClick={this.export(logs)}>Export</Button>&nbsp;
-            <Button onClick={this.addLog}>Add Log</Button>
           </span>
-        </h1>
-        <hr />
+        </h2>
         <Table responsive striped condensed>
           <thead>
             <tr>

@@ -1,6 +1,5 @@
 import React from 'react';
 import AddLogForm from './AddLogForm';
-import { Col, Row } from 'react-bootstrap';
 import { addLog } from '../actions';
 
 export default class AddLog extends React.Component {
@@ -23,15 +22,7 @@ export default class AddLog extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Add log</h1>
-        <hr />
-        <Row>
-          <Col md={4} mdOffset={4}>
-            <AddLogForm addLogHandler={this.addLogHandler} />
-          </Col>
-        </Row>
-      </div>
+      <AddLogForm addLogHandler={this.addLogHandler} />
     );
   }
 }

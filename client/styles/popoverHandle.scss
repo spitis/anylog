@@ -1,0 +1,9 @@
+.popover {
+  display: none;
+  position: absolute;
+  z-index: 5;
+}
+
+.popover.visible {
+  display: block;
+}

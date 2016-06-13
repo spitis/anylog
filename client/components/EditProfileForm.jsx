@@ -11,6 +11,9 @@ import {
   Row,
 } from 'react-bootstrap';
 
+import VerificationIndicator from './VerificationIndicator';
+
+
 const editProfileForm = (props) => {
   const {
     fields: { username, email, password, smsNumber, oldPassword },
@@ -29,12 +32,18 @@ const editProfileForm = (props) => {
 
   const verification = (verified, handler) => {
     if (verified) {
-      return <div className="verified">Verified</div>;
+      return (
+        <VerificationIndicator verified>
+          Verified!
+        </VerificationIndicator>
+      );
     }
     return (
-      <Button onClick={handler} className="unverified" block>
-        Verify now
-      </Button>
+      <VerificationIndicator>
+        <Button onClick={handler} block>
+          Verify now
+        </Button>
+      </VerificationIndicator>
     );
   };
 
@@ -43,8 +52,8 @@ const editProfileForm = (props) => {
       {error}
       <Form horizontal onSubmit={editProfileHandler}>
         <FormGroup controlId="editProfile-username">
-          <Col componentClass={ControlLabel} sm={2}>Username</Col>
-          <Col sm={7}>
+          <Col componentClass={ControlLabel} sm={3}>Username</Col>
+          <Col sm={8}>
             <FormControl
               {...username}
               type="text"
@@ -54,8 +63,8 @@ const editProfileForm = (props) => {
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-email">
-          <Col componentClass={ControlLabel} sm={2}>Email</Col>
-          <Col sm={7}>
+          <Col componentClass={ControlLabel} sm={3}>Email</Col>
+          <Col sm={8}>
             <FormControl
               {...email}
               type="email"
@@ -63,26 +72,26 @@ const editProfileForm = (props) => {
               required
             />
           </Col>
-          <Col sm={3}>
+          <Col sm={1}>
             {verification(emailVerified, verifyEmailHandler)}
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-sms" block>
-          <Col componentClass={ControlLabel} sm={2}>SMS Number</Col>
-          <Col sm={7}>
+          <Col componentClass={ControlLabel} sm={3}>SMS Number</Col>
+          <Col sm={8}>
             <FormControl
               {...smsNumber}
               type="text"
               placeholder="SMS Number"
             />
           </Col>
-          <Col sm={3}>
+          <Col sm={1}>
             {verification(smsVerified, verifySmsHandler)}
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-password">
-          <Col componentClass={ControlLabel} sm={2}>New Password</Col>
-          <Col sm={7}>
+          <Col componentClass={ControlLabel} sm={3}>New Password</Col>
+          <Col sm={8}>
             <FormControl
               {...password}
               type="password"
@@ -91,7 +100,7 @@ const editProfileForm = (props) => {
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-oldPassword">
-          <Col sm={9}>
+          <Col sm={11}>
             <ControlLabel>
               Re-enter your password to make any changes:
             </ControlLabel>
@@ -104,7 +113,7 @@ const editProfileForm = (props) => {
           </Col>
         </FormGroup>
         <Row>
-          <Col sm={9}>
+          <Col sm={11}>
             <Button type="submit" bsStyle="primary" block>
               Update Profile
             </Button>
