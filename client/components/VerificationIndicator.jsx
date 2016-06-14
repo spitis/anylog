@@ -8,14 +8,17 @@ import { Glyphicon } from 'react-bootstrap';
 
 const handle = (props) => {
   let icon;
+  let style;
   if (props.verified) {
     icon = <Glyphicon glyph="ok-sign" />;
+    style = { cursor: 'pointer', color: 'green' };
   } else {
     icon = <Glyphicon glyph="exclamation-sign" />;
+    style = { cursor: 'pointer', color: 'red' };
   }
 
   return (
-    <div style={{ cursor: 'pointer' }}>
+    <div style={style}>
       {icon}
     </div>
   );

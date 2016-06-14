@@ -61,7 +61,7 @@ export function loginSuccess(responseJson) {
   };
 }
 
-export const loginSuccessRedirect = redirectAfterAction(loginSuccess, '/logs');
+export const loginSuccessRedirect = redirectAfterAction(loginSuccess, '/dashboard');
 
 export function loginRequest() {
   return { type: LOGIN_ATTEMPT };
@@ -95,7 +95,7 @@ export function addLogSuccess() {
   return { error: null, type: ADD_LOG_RESULT };
 }
 
-export const addLogSuccessRedirect = redirectAfterAction(addLogSuccess, '/logs');
+export const addLogSuccessRedirect = redirectAfterAction(addLogSuccess, '/dashboard');
 
 export function fetchLogsRequest() {
   return { type: FETCH_LOGS_ATTEMPT };
