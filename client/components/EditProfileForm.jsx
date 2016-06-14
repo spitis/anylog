@@ -30,18 +30,8 @@ const editProfileForm = (props) => {
     error = <div className="form-error">{errorMessage}</div>;
   }
 
-  const validateSMS = (smsNumber) => /^1\d{10}$/.test(smsNumber);
-
   const smsValidationMessage = (handler) => {
-    if (!props.fields.smsNumber.length) {
-      return (
-        <div style={{ fontSize: '12px', width: '200%' }}>
-          To log events by SMS, please enter your SMS number.
-          Anylog currently only supports North American numbers, e.g.,
-          15554446666.
-        </div>
-      );
-    } else if (validateSMS(props.fields.smsNumber)) {
+    if (/^1\d{10}$/.test(smsNumber)) {
       return (
         <Button onClick={handler} block>
           Verify now
@@ -50,6 +40,7 @@ const editProfileForm = (props) => {
     }
     return (
       <div style={{ fontSize: '12px', width: '200%' }}>
+        To log events by SMS, please enter your SMS number.
         Anylog currently only supports North American numbers, e.g.,
         15554446666.
       </div>
