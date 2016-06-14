@@ -3,14 +3,7 @@ import React from 'react';
 const appName = 'anylog';
 const frontCopy = (
   <div>
-    <br />
-    <hr />
-    <h3 style={{ color: 'red' }}> Anylog alpha v0.2.</h3>
-    <h4 style={{ color: 'red' }}>This is a still a prototype. Your account and logs
-      will be reset. Do not save anything private or use a standard password.
-    </h4>
-    <hr />
-    <h1>Anylog</h1>
+    <h1>Anylog alpha v0.2</h1>
     <br />
     <h3>1. Log anything.</h3>
     <h4>

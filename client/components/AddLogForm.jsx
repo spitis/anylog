@@ -21,7 +21,7 @@ const addLogForm = (props) => {
     <div>
       <form onSubmit={addLogHandler}>
         <FormGroup controlId="addLog-eventName">
-          <ControlLabel>Event Name</ControlLabel>
+          <ControlLabel>Event</ControlLabel>
           <FormControl
             {...eventName}
             type="text"
@@ -30,7 +30,7 @@ const addLogForm = (props) => {
           />
         </FormGroup>
         <FormGroup controlId="addLog-eventText">
-          <ControlLabel>Event Text</ControlLabel>
+          <ControlLabel>Description</ControlLabel>
           <FormControl
             {...eventText}
             type="text"

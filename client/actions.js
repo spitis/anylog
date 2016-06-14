@@ -217,7 +217,8 @@ export function addLog(authToken, eventName, ...args) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        return addLogSuccessRedirect(dispatch);
+        dispatch(addLogSuccess);
+        return dispatch(fetchLogs(authToken));
       } else if (response.stats === 401) {
         logoutRedirect(dispatch);
       } else if (response.status >= 400 && response.status < 500) {

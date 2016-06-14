@@ -72,8 +72,8 @@ const editProfileForm = (props) => {
               required
             />
           </Col>
-          <Col sm={1}>
-            {verification(emailVerified, verifyEmailHandler)}
+          <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
+              {verification(emailVerified, verifyEmailHandler)}
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-sms" block>
@@ -85,7 +85,7 @@ const editProfileForm = (props) => {
               placeholder="SMS Number"
             />
           </Col>
-          <Col sm={1}>
+          <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
             {verification(smsVerified, verifySmsHandler)}
           </Col>
         </FormGroup>

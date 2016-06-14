@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './components/App';
 import Home from './components/Home';
-import Logs from './components/Logs';
+import { LogsPage } from './components/Logs';
 import AddLog from './components/AddLog';
 import Dashboard from './components/Dashboard';
 import Page404 from './components/Page404';
@@ -26,7 +26,7 @@ export default (store) => (
       onEnter={redirectToLogs(store)}
     />
     <Route path="/createaccount" component={CreateAccount} />
-    <Route path="/logs" component={Logs} />
+    <Route path="/logs" component={LogsPage} />
     <Route path="/addLog" component={AddLog} />
     <Route path="/editProfile" component={EditProfile} />
     <Route path="/dashboard" component={Dashboard} />

@@ -43,7 +43,7 @@ export default class Navigation extends React.Component {
 
   render() {
     const user = this.context.store.getState().user;
-    let brandLink = user.isLoggedIn ? '/logs' : '/';
+    let brandLink = user.isLoggedIn ? '/dashboard' : '/';
     let rightMenu = user.isLoggedIn ?
       <LoggedInDropdown
         user={user}
@@ -63,20 +63,13 @@ export default class Navigation extends React.Component {
         </Navbar.Header>
         <Navbar.Collapse className="no-transition">
           <Nav pullRight className="nav navbar-nav">
-            <LoggedInOnly>
+            {/* <LoggedInOnly>
               <LinkContainer to={{ pathname: '/logs' }}>
                 <NavItem onClick={e => e.target.blur()} eventKey={1}>
                   <Glyphicon glyph="list" /> Logs
                 </NavItem>
               </LinkContainer>
-            </LoggedInOnly>
-            <LoggedInOnly>
-              <LinkContainer to={{ pathname: '/addLog' }}>
-                <NavItem onClick={e => e.target.blur()} eventKey={2}>
-                  <Glyphicon glyph="plus" /> Add
-                </NavItem>
-              </LinkContainer>
-            </LoggedInOnly>
+            </LoggedInOnly>*/}
             {rightMenu}
           </Nav>
         </Navbar.Collapse>

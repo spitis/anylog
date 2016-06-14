@@ -15,7 +15,7 @@ const handle = (props) => {
   }
 
   return (
-    <div style={{ fontSize: '1.25em', margin: '8px 0' }}>
+    <div style={{ cursor: 'pointer' }}>
       {icon}
     </div>
   );

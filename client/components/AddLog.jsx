@@ -1,6 +1,7 @@
 import React from 'react';
 import AddLogForm from './AddLogForm';
 import { addLog } from '../actions';
+import { reset } from 'redux-form';
 
 export default class AddLog extends React.Component {
 
@@ -13,6 +14,7 @@ export default class AddLog extends React.Component {
     if (eventText && eventText.value) {
       args.push(['event_json', { text: eventText.value }]);
     }
+    this.context.store.dispatch(reset('addLog'));
     addLog(
       authToken,
       eventName.value,

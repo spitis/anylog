@@ -3,7 +3,10 @@ import { fetchLogs } from '../actions';
 import {
   Button,
   Table,
+  Glyphicon,
 } from 'react-bootstrap';
+import dashItem from './wrappers/dashItem';
+import page from './wrappers/page';
 import '../styles/Logs.scss';
 
 function stringify(stringOrJSON) {
@@ -76,7 +79,30 @@ export default class Logs extends React.Component {
     fetchLogs(authToken)(this.context.store.dispatch);
   }
 
-  export = (logs) => () => {
+  rightDashHeader = () => (
+    <span>
+      <Glyphicon
+        glyph="refresh"
+        onClick={this.fetchLogs}
+      />
+      <Glyphicon
+        glyph="save"
+        onClick={this.exportToCSV(this.context.store.getState().logs.logs || [])}
+      />
+    </span>
+  );
+
+  rightPageHeader = () => (
+    <span>
+      <Button onClick={this.fetchLogs}>Refresh</Button>&nbsp;
+      <Button
+        onClick={this.exportToCSV(
+          this.context.store.getState().logs.logs || [])}
+      >Export</Button>
+    </span>
+  )
+
+  exportToCSV = (logs) => () => {
     exportJSONtoCSV(logs, ['timestamp', 'event_name', 'event_json'], 'export');
   }
 
@@ -85,33 +111,25 @@ export default class Logs extends React.Component {
     const logs = state.logs.logs || [];
 
     return (
-      <div>
-        <h2>
-          <span style={{ float: 'right' }}>
-            <Button onClick={this.fetchLogs}>Refresh</Button>&nbsp;
-            <Button onClick={this.export(logs)}>Export</Button>&nbsp;
-          </span>
-        </h2>
-        <Table responsive striped condensed>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Event</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((log, i) =>
-              <Log
-                key={i}
-                timestamp={(new Date(log.timestamp)).toLocaleString()}
-                eventName={log.event_name}
-                eventText={log.event_json && log.event_json.text}
-              />
-            )}
-          </tbody>
-        </Table>
-      </div>
+      <Table responsive striped condensed>
+        <thead>
+          <tr>
+            <th className="col-md-3">Timestamp</th>
+            <th className="col-md-4">Event</th>
+            <th className="col-md-5">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {logs.map((log, i) =>
+            <Log
+              key={i}
+              timestamp={(new Date(log.timestamp)).toLocaleString()}
+              eventName={log.event_name}
+              eventText={log.event_json && log.event_json.text}
+            />
+          )}
+        </tbody>
+      </Table>
     );
   }
 }
@@ -133,3 +151,6 @@ Log.propTypes = {
   eventName: React.PropTypes.string,
   eventText: React.PropTypes.string,
 };
+
+export const LogsDash = dashItem(Logs, 'Logs');
+export const LogsPage = page(Logs, 'Logs');

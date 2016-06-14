@@ -44,11 +44,11 @@ const loginForm = (props) => {
             required
           />
         </FormGroup>
-        <div className="help-block text-right">
+        {/* <div className="help-block text-right">
           <Link to="forgotpassword" onClick={selectHandler}>
             Forgot password
           </Link>
-        </div>
+        </div>*/}
         <Button
           type="submit"
           bsStyle="primary"
