@@ -96,7 +96,7 @@ class Log(db.Model):
 
     def __init__(self, user, event_name, event_tags=[], event_json=None,\
         namespace='Custom', timestamp=None):
-        self.timestamp = timestamp or datetime.utcnow()
+        self.timestamp = timestamp or datetime.now()
         self.namespace = namespace
         self.event_name = event_name
         self.event_tags = event_tags

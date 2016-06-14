@@ -57,9 +57,9 @@ const editProfileForm = (props) => {
               You can include an event description after a "@@".
             </div> :
             <div style={{ fontSize: '12px', width: '200%' }}>
-              Verified! To log events by email, send an email to
-              <a href="mailto:log@anylog.xyz">log@anylog.xyz</a>. The email
-                subject will be the event name, and the body the description.
+              Verified! To log events by email, send an email
+              to <a href="mailto:log@anylog.xyz">log@anylog.xyz</a>. The email
+              subject will be the event name, and the body the description.
             </div>
           }
         </VerificationIndicator>

@@ -8,6 +8,7 @@ import {
 import dashItem from './wrappers/dashItem';
 import page from './wrappers/page';
 import '../styles/Logs.scss';
+import moment from 'moment';
 
 function stringify(stringOrJSON) {
   if (typeof stringOrJSON === 'object') {
@@ -109,7 +110,6 @@ export default class Logs extends React.Component {
   render() {
     const state = this.context.store.getState();
     const logs = state.logs.logs || [];
-
     return (
       <Table responsive striped condensed>
         <thead>
@@ -123,7 +123,7 @@ export default class Logs extends React.Component {
           {logs.map((log, i) =>
             <Log
               key={i}
-              timestamp={(new Date(log.timestamp)).toLocaleString()}
+              timestamp={moment(log.timestamp).format('ddd, MMM D YY, h:mm a')}
               eventName={log.event_name}
               eventText={log.event_json && log.event_json.text}
             />

@@ -46,16 +46,18 @@ export default class DataSources extends React.Component {
 
     const verification = (verified, type) => (
       verified ?
-        (type === 'SMS number' ?
+        <VerificationIndicator verified>
+          (type === 'SMS number' ?
           <div style={{ fontSize: '12px', width: '200%' }}>
             Verified! To log events by text, send a text to 17077776191.
             You can include an event description after a "@@".
           </div> :
           <div style={{ fontSize: '12px', width: '200%' }}>
-            Verified! To log events by email, send an email to
-            <a href="mailto:log@anylog.xyz">log@anylog.xyz</a>. The email
-              subject will be the event name, and the body the description.
-          </div>) :
+            Verified! To log events by email, send an email
+            to <a href="mailto:log@anylog.xyz">log@anylog.xyz</a>. The email
+            subject will be the event name, and the body the description.
+          </div>)
+        </VerificationIndicator> :
         <VerificationIndicator>
           <div style={{ backgroundColor: '#f6f6f6' }}>
             <Link to="/editProfile">Verify your {type} on the account page.</Link>

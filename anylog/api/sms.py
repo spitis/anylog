@@ -31,12 +31,11 @@ def receive_sms():
 
     text = text.split("@@")
     event_name = text[0].strip()
+    event_text = ""
     if len(text) > 1:
         event_text = "".join(text[1:]).strip()
 
-    log = Log(user, text, event_json=
-            {'text': event_text})
-    db.session.add(log)
+    log = Log(user, text, event_json={'text': event_text})
     db.session.add(log)
     db.session.commit()
 
