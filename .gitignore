@@ -4,7 +4,7 @@ __pycache__/
 
 # Node/Webpack
 node_modules/
-anylog/static/
+anylog/static/build/
 
 # config
 anylog/config/prod.cfg

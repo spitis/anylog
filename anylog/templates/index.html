@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Anylog</title>
-    <link rel="stylesheet" type="text/css" href="/node_modules/react-grid-layout/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="/node_modules/react-resizable/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='react-grid-styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='react-resizable-styles.css') }}">
 
     <script src="https://use.typekit.net/ihd3qsi.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
@@ -25,6 +25,6 @@
   <body>
     <div id="app"></div>
 
-    <script src="{{ url_for('static', filename='bundle.js') }}"></script>
+    <script src="{{ url_for('static/build', filename='bundle.js') }}"></script>
   </body>
 </html>

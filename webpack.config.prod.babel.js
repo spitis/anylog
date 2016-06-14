@@ -4,7 +4,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'client'),
-  build: path.join(__dirname, 'anylog/static'),
+  build: path.join(__dirname, 'anylog/static/build'),
   webroot: 'https://anylog.xyz',
 };
 
@@ -12,7 +12,7 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: PATHS.build,
-    publicPath: 'static/',
+    publicPath: 'static/build/',
     filename: 'bundle.js',
   },
   entry: {
