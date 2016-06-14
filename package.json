@@ -49,6 +49,7 @@
     "redux": "^3.5.2",
     "redux-form": "^5.2.5",
     "redux-persist": "^3.2.2",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "moment": "^2.13.0"
   }
 }

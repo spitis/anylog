@@ -35,7 +35,7 @@ def receive_sms():
     if len(text) > 1:
         event_text = "".join(text[1:]).strip()
 
-    log = Log(user, text, event_json={'text': event_text})
+    log = Log(user, event_name, event_json={'text': event_text})
     db.session.add(log)
     db.session.commit()
 
