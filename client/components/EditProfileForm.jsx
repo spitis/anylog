@@ -31,7 +31,7 @@ const editProfileForm = (props) => {
   }
 
   const smsValidationMessage = (handler) => {
-    if (/^1\d{10}$/.test(smsNumber)) {
+    if (/^1\d{10}$/.test(smsNumber.value)) {
       return (
         <Button onClick={handler} block>
           Verify now
