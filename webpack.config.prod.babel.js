@@ -26,7 +26,7 @@ module.exports = {
       'GLOBAL.API_ROOT_VERSIONED': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
       'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api`),
     }),
-    new CleanPlugin('static'),
+    new CleanPlugin('static/build'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.MinChunkSizePlugin({
