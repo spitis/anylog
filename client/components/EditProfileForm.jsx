@@ -30,19 +30,58 @@ const editProfileForm = (props) => {
     error = <div className="form-error">{errorMessage}</div>;
   }
 
-  const verification = (verified, handler) => {
+  const validateSMS = (smsNumber) => /^1\d{10}$/.test(smsNumber);
+
+  const smsValidationMessage = (handler) => {
+    if (!props.fields.smsNumber.length) {
+      return (
+        <div style={{ fontSize: '12px', width: '200%' }}>
+          To log events by SMS, please enter your SMS number.
+          Anylog currently only supports North American numbers, e.g.,
+          15554446666.
+        </div>
+      );
+    } else if (validateSMS(props.fields.smsNumber)) {
+      return (
+        <Button onClick={handler} block>
+          Verify now
+        </Button>
+      );
+    }
+    return (
+      <div style={{ fontSize: '12px', width: '200%' }}>
+        Anylog currently only supports North American numbers, e.g.,
+        15554446666.
+      </div>
+    );
+  };
+
+  const verification = (toVerify, verified, handler) => {
     if (verified) {
       return (
-        <VerificationIndicator verified>
-          Verified!
+        <VerificationIndicator verified>.
+          {toVerify === 'sms' ?
+            <div style={{ fontSize: '12px', width: '200%' }}>
+              Verified! To log events by text, send a text to 17077776191.
+              You can include an event description after a "@@".
+            </div> :
+            <div style={{ fontSize: '12px', width: '200%' }}>
+              Verified! To log events by email, send an email to
+              <a href="mailto:log@anylog.xyz">log@anylog.xyz</a>. The email
+                subject will be the event name, and the body the description.
+            </div>
+          }
         </VerificationIndicator>
       );
     }
     return (
       <VerificationIndicator>
-        <Button onClick={handler} block>
-          Verify now
-        </Button>
+        {toVerify === 'sms' ?
+          smsValidationMessage(handler) :
+          <Button onClick={handler} block>
+            Verify now
+          </Button>
+        }
       </VerificationIndicator>
     );
   };
@@ -73,7 +112,7 @@ const editProfileForm = (props) => {
             />
           </Col>
           <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
-              {verification(emailVerified, verifyEmailHandler)}
+              {verification('email', emailVerified, verifyEmailHandler)}
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-sms" block>
@@ -86,7 +125,7 @@ const editProfileForm = (props) => {
             />
           </Col>
           <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
-            {verification(smsVerified, verifySmsHandler)}
+            {verification('sms', smsVerified, verifySmsHandler)}
           </Col>
         </FormGroup>
         <FormGroup controlId="editProfile-password">

@@ -39,7 +39,7 @@ export default class Dashboard extends React.Component {
         draggableHandle=".dash-item-header"
       >
         <div key={'s'}>
-          <DashItem dashTitle="Search and Filters">
+          <DashItem dashTitle="Search and filter logs">
             <b>Coming soon!</b>
           </DashItem>
         </div>
@@ -56,7 +56,7 @@ export default class Dashboard extends React.Component {
           <DashItem dashTitle="Feedback" >
             <p>
               Welcome to the public alpha of Anylog. This is very much a work
-              in progress, though the core of it is ready to use.
+              in progress, though the core is usable and ready to log.
             </p>
             <p>
               Any questions, comments or feature requests you have are
