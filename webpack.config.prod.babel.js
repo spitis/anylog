@@ -37,12 +37,12 @@ module.exports = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    /* new webpack.optimize.UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       mangle: false,
       compress: {
         warnings: false, // Suppress uglification warnings
       },
-    }),*/
+    }),
   ],
   module: {
     loaders: [
