@@ -17,14 +17,14 @@ export default class Home extends React.Component {
     this.unsubscribe = store.subscribe(this.handleStoreChange.bind(this));
     const user = store.getState().user;
     if (user.isLoggedIn) {
-      browserHistory.push('/logs');
+      browserHistory.push('/dashboard');
     }
   }
 
   componentWillUpdate() {
     const user = this.context.store.getState().user;
     if (user.isLoggedIn) {
-      browserHistory.push('/logs');
+      browserHistory.push('/dashboard');
     }
   }
 

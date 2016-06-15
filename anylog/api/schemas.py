@@ -1,6 +1,7 @@
 import re
 from anylog.api.models import EMAIL_REGEX
-from voluptuous import Schema, Required, Invalid, All, Length
+from voluptuous import Schema, Required, Invalid, All, Length, Any
+from datetime import datetime as dt
 
 def Email(msg=None):
     def f(v):
@@ -18,12 +19,28 @@ def NotEmail(msg=None):
             return str(v)
     return f
 
+def POSIX(msg=None):
+    def f(i):
+        try:
+            return dt.fromtimestamp(int(i))
+        except:
+            raise Invalid(msg or ("Invalid date format."))
+    return f
+
 userSchema = Schema({
     'username': All(str, Length(min=4), NotEmail()),
     'password': All(str, Length(min=8)),
     'email': All(str, Email()),
     'active': bool,
     'sms_number': int
+})
+
+updateEventSchema = Schema({
+    'namespace': str,
+    'event_name': str,
+    'event_tags': [],
+    'event_json': dict,
+    'timestamp': POSIX()
 })
 
 newEventSchema = Schema({

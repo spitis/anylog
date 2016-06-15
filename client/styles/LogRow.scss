@@ -1,0 +1,40 @@
+.bootstrap-datetimepicker-widget {
+  right: 0px !important;
+  left: 0px !important;
+  margin: 0 5px;
+
+  .btn {
+    padding: 0;
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+
+  table {
+    text-align: center;
+    margin: 0 auto;
+
+    td {
+      padding: 0 5px !important;
+    }
+  }
+}
+
+.edit-log {
+  text-align: center;
+
+  span {
+    padding: 2px;
+    cursor: pointer;
+    color: #efefef;
+
+    &:hover {
+      color: #888;
+    }
+
+    &:active {
+      color: #666;
+    }
+  }
+}

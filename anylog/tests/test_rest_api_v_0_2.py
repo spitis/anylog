@@ -364,7 +364,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
                 event_name="random",
                 event_tags=["a","b"],
                 event_json={"text": "cooltext"},
-                namespace="custom2",
+                namespace="custom2"
             ))
         )
 
@@ -375,7 +375,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         assert(log.event_json.get('text') == 'cooltext')
         assert(log.namespace == 'custom2')
 
-    def test_post_logs_URL_vs_JSON(self):
+    def test_post_logs_URL_params_merge_with_JSON(self):
         user = User.query.first()
         res = self.open_with_auth(
             url= API_PREFIX + '/logs?event_name=coolevent&event_text=urltext',
@@ -385,12 +385,11 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             data=json.dumps(dict(
                 event_tags=["a","b"],
                 event_json={"text": "cooltext"},
-                namespace="custom2",
+                namespace="custom2"
             ))
         )
 
         log = Log.query.first()
-
         assert(log.event_name == 'coolevent')
         assert('a' in log.event_tags)
         assert('b' in log.event_tags)
@@ -399,6 +398,8 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
 
     def test_get_logs(self):
         username = User.query.first().username
+
+        #post two logs
         self.open_with_auth(
             url= API_PREFIX + '/logs?event_name=random_event',
             method='POST',
@@ -414,6 +415,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             data=None
         )
 
+        #test get all
         res = self.open_with_auth(
             url= API_PREFIX + '/logs',
             method='GET',
@@ -421,10 +423,10 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             password="password",
             data=None
         )
-
         res = json.loads(res.data.decode('utf-8'))['logs']
         assert(len(res) == 2)
 
+        #test get one
         res = self.open_with_auth(
             url= API_PREFIX + '/logs?event_name=random',
             method='GET',
@@ -432,7 +434,6 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             password="password",
             data=None
         )
-
         res = json.loads(res.data.decode('utf-8'))['logs']
         assert(len(res) == 1)
         assert("a" in res[0]["event_tags"])
@@ -440,6 +441,7 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
         assert(res[0]["event_json"]["text"] == "cooltext")
         assert(res[0]["namespace"] == "custom2")
 
+        #test get the other
         res = self.open_with_auth(
             url= API_PREFIX + '/logs?event_name=random_event',
             method='GET',
@@ -447,12 +449,11 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             password="password",
             data=None
         )
-
         res = json.loads(res.data.decode('utf-8'))['logs']
         assert(len(res) == 1)
         assert(res[0]["event_name"] == "random_event")
 
-    def test_logs_requires_auth(self):
+    def test_post_logs_requires_auth(self):
         username = User.query.first().username
         res = self.open_with_auth(
             url= API_PREFIX + '/logs?event_name=random_event',
@@ -461,9 +462,10 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             password="password2",
             data=None
         )
-
         assert(res.status_code == 401)
 
+    def test_get_logs_requires_auth(self):
+        username = User.query.first().username
         res = self.open_with_auth(
             url= API_PREFIX + '/logs',
             method='GET',
@@ -471,16 +473,92 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
             password="password2",
             data=None
         )
-
         assert(res.status_code == 401)
 
+    def test_delete_log(self):
+        user = User.query.first()
+        log = Log(user=user, event_name="testlog")
+        db.session.add(log)
+        db.session.commit()
+
+        assert(len(Log.query.all()) == 1)
+
         res = self.open_with_auth(
-            url= API_PREFIX + '/logs?event_name=random',
-            method='GET',
-            username=username,
+            url= API_PREFIX + '/log/' + str(log.id),
+            method='DELETE',
+            username=user.username,
             password="password",
             data=None
         )
+
+        assert(len(Log.query.all()) == 0)
+
+    def test_update_log(self):
+        user = User.query.first()
+        log = Log(user=user, event_name="testlog")
+        db.session.add(log)
+        db.session.commit()
+
+        assert(Log.query.first().event_name == "testlog")
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/log/' + str(log.id),
+            method='PUT',
+            username=user.username,
+            password="password",
+            data=json.dumps(dict(
+                event_name="test2",
+                event_tags=['a','b'],
+                event_json={"text": "cooltext"},
+                namespace="custom2"
+            ))
+        )
+
+        log = Log.query.first()
+
+        assert(log.event_name == "test2")
+        assert('a' in log.event_tags)
+        assert('b' in log.event_tags)
+        assert(log.event_json['text'] == "cooltext")
+        assert(log.namespace == 'custom2')
+
+    def test_cannot_get_or_update_another_users_logs(self):
+        user = User.query.first()
+        user2 = User(username="test2",\
+            email="test2@test.com", password="password2")
+
+        db.session.add(user2)
+        db.session.commit()
+
+        log = Log(user=user2, event_name="testlog")
+        db.session.add(log)
+        db.session.commit()
+
+        #test cannot update
+        res = self.open_with_auth(
+            url= API_PREFIX + '/log/' + str(log.id),
+            method='PUT',
+            username=user.username,
+            password="password",
+            data=json.dumps(dict(
+                event_name="test2"
+            ))
+        )
+
+        assert(res.status_code == 401)
+
+        #test cannot get
+        res = self.open_with_auth(
+            url= API_PREFIX + '/logs',
+            method='GET',
+            username=user.username,
+            password="password",
+            data=None
+        )
+        resJson = json.loads(res.data.decode('utf-8'))
+
+        assert(len(resJson['logs']) == 0)
+
 
 if __name__ == '__main__':
     unittest.main()

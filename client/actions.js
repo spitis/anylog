@@ -359,3 +359,47 @@ export function sendVerificationSms(authToken) {
     },
   });
 }
+
+export function deleteLog(authToken, logId) {
+  return dispatch => {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/log/${logId}`, {
+      method: 'delete',
+      headers: {
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchLogs(authToken));
+      } else if (response.status >= 400 && response.status < 500) {
+        response.text().then((text) => console.log(text));
+      }
+    });
+  };
+}
+
+export function updateLog(authToken, log) {
+  return dispatch => {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/log/${log.id}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+      body: JSON.stringify({
+        timestamp: log.timestamp,
+        event_name: log.eventName,
+        event_json: {
+          text: log.eventText,
+        },
+      }),
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchLogs(authToken));
+      } else if (response.status >= 400 && response.status < 500) {
+        response.text().then((text) => console.log(text));
+      }
+    });
+  };
+}

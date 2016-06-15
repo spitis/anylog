@@ -6,7 +6,7 @@ import React from 'react';
 import '../../styles/popoverHandle.scss';
 
 export default (Component) => class extends React.Component {
-  toggleOpen = (e) => {
+  toggleOpen = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -16,7 +16,7 @@ export default (Component) => class extends React.Component {
     isOpen: false,
   };
 
-  close = (e) => {
+  close = () => {
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
     }

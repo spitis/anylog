@@ -4,9 +4,10 @@ from flask import Blueprint, request, abort, g, jsonify
 from sqlalchemy import or_
 from anylog.api.models import User, Log, db
 from anylog.api.basicAuth import requires_auth, requires_password_auth, authenticate
-from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema
+from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema, updateEventSchema
 import json
 from phone_iso3166.country import phone_country
+from datetime import datetime
 
 api = Blueprint('api',__name__)
 
@@ -135,6 +136,70 @@ def put_user(username):
         return {
             'error': 'unknown error'
         }, 400
+
+@api.route('/log/<int:log_id>', methods=['PUT'])
+@requires_auth
+def put_log(log_id):
+    log = Log.query.filter(Log.id == log_id).first()
+    if not log:
+        return jsonify({
+            'error': 'Bad request. No such log.'
+        }), 400
+    if log.user_id != g.user.id:
+        return jsonify({
+            'error': 'Not authorized.'
+        }), 401
+
+    json = request.get_json(force=True, silent=True)
+    if not json:
+        return jsonify({
+            'error': 'Request is not valid JSON'
+        }), 400
+    try:
+        updateEventSchema(json)
+    except Exception as e:
+        return jsonify({
+            'error': 'Improper request. Check documentation and try again.'
+        }), 400
+    try:
+        for i in list(json):
+            if i == 'timestamp':
+                dt = datetime.fromtimestamp(int(json['timestamp']))
+                setattr(log, 'timestamp', dt)
+            else:
+                setattr(log, i, json[i])
+        db.session.commit()
+        res = dict(
+            id= log.id,
+            timestamp= str(log.timestamp),
+            namespace= log.namespace,
+            event_name= log.event_name,
+            event_tags= log.event_tags,
+            event_json= log.event_json
+        )
+        return jsonify({'log': res}), 200
+    except Exception as e:
+        return {
+            'error': 'unknown error'
+        }, 400
+
+@api.route('/log/<int:log_id>', methods=['DELETE'])
+@requires_auth
+def delete_log(log_id):
+    log = Log.query.filter(Log.id == log_id).first()
+    if not log:
+        return jsonify({
+            'error': 'Bad request. No such log.'
+        }), 400
+    if log.user_id != g.user.id:
+        return jsonify({
+            'error': 'Not authorized.'
+        }), 401
+
+    db.session.delete(log)
+    db.session.commit()
+
+    return '', 200
 
 @api.route('/logs', methods=['POST','GET'])
 @requires_auth
