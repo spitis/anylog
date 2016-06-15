@@ -19,24 +19,24 @@ export default class EditProfile extends React.Component {
     let {
       emailVerified,
       smsVerified,
+      smsCountryCode,
     } = this.context.store.getState().user;
     this.context.store.dispatch(fetchProfile(loginToken, username));
+
     this.unsubscribe = this.context.store.subscribe(() => {
       const user = this.context.store.getState().user;
 
-      if (user.smsVerified && (!smsVerified)) {
-        smsVerified = true;
-        this.forceUpdate();
-      } else if (user.emailVerified && (!emailVerified)) {
-        emailVerified = true;
-        this.forceUpdate();
-      } else if (user.fetchProfileError) {
-        this.errorMessage = user.fetchProfileError.error;
-        this.forceUpdate();
-      } else if (user.updateProfileError) {
-        this.errorMessage = user.updateProfileError.error;
-        this.forceUpdate();
-      } else if (this.errorMessage) {
+      if ((user.smsVerified && (!smsVerified)) ||
+         (user.emailVerified && (!emailVerified)) ||
+         (user.smsCountryCode !== smsCountryCode) ||
+         (user.fetchProfileError) ||
+         (user.updateProfileError) ||
+         (this.errorMessage)) {
+        emailVerified = user.emailVerified;
+        smsVerified = user.smsVerified;
+        smsCountryCode = user.smsCountryCode;
+        this.errorMessage = user.fetchProfileError && user.fetchProfileError.error;
+        this.errorMessage = user.updateProfileError && user.updateProfileError.error;
         this.errorMessage = null;
         this.forceUpdate();
       }
@@ -93,7 +93,7 @@ export default class EditProfile extends React.Component {
   }
 
   render() {
-    const { smsVerified, emailVerified } = this.context.store.getState().user;
+    const { smsVerified, emailVerified, smsCountryCode } = this.context.store.getState().user;
 
     return (
       <Col lg={8} lgOffset={2}>
@@ -102,6 +102,7 @@ export default class EditProfile extends React.Component {
           errorMessage={this.errorMessage}
           smsVerified={smsVerified}
           emailVerified={emailVerified}
+          smsCountryCode={smsCountryCode}
           verifySmsHandler={this.verifySmsHandler}
           verifyEmailHandler={this.verifyEmailHandler}
         />

@@ -9,11 +9,11 @@ import Page404 from './components/Page404';
 import CreateAccount from './components/CreateAccount';
 import EditProfile from './components/EditProfile';
 
-const redirectToLogs = (store) => (
+const redirectToDash = (store) => (
   (_, replaceState) => {
     const state = store.getState();
     if (state.user.loggedIn) {
-      replaceState(null, '/logs');
+      replaceState(null, '/dashboard');
     }
   }
 );
@@ -23,7 +23,7 @@ export default (store) => (
     <IndexRoute
       component={Home}
       store={store}
-      onEnter={redirectToLogs(store)}
+      onEnter={redirectToDash(store)}
     />
     <Route path="/createaccount" component={CreateAccount} />
     <Route path="/logs" component={LogsPage} />

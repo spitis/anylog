@@ -12,13 +12,14 @@ import {
 } from 'react-bootstrap';
 
 import VerificationIndicator from './VerificationIndicator';
-
+import Flag from './mini/Flag';
 
 const editProfileForm = (props) => {
   const {
     fields: { username, email, password, smsNumber, oldPassword },
     editProfileHandler,
     errorMessage,
+    smsCountryCode,
     smsVerified,
     verifySmsHandler,
     emailVerified,
@@ -77,6 +78,25 @@ const editProfileForm = (props) => {
     );
   };
 
+  const ccMessage = (cc) => {
+    switch (cc) {
+      case 'US':
+        return 'Add logs by texting +1 (707) 777-6191.';
+      case 'CA':
+        return 'Add logs by texting +1 (343) 344-1234.';
+      default:
+        return `Sorry! We don't support SMS logging in ${cc} yet.`;
+    }
+  };
+
+  const countryCodeMessage =
+    (<span>
+      {smsCountryCode}
+      &nbsp;( <Flag cc={smsCountryCode} /> ):&nbsp;
+      {ccMessage(smsCountryCode)}
+    </span>);
+
+
   return (
     <div>
       {error}
@@ -119,6 +139,12 @@ const editProfileForm = (props) => {
             {verification('sms', smsVerified, verifySmsHandler)}
           </Col>
         </FormGroup>
+        {smsCountryCode ?
+          <Row>
+            <Col sm={8} smOffset={3} style={{ marginTop: '-10px', marginBottom: '12px' }}>
+              {countryCodeMessage}
+            </Col>
+          </Row> : null}
         <FormGroup controlId="editProfile-password">
           <Col componentClass={ControlLabel} sm={3}>New Password</Col>
           <Col sm={8}>
@@ -171,6 +197,7 @@ editProfileForm.propTypes = {
   fields: React.PropTypes.object,
   errorMessage: React.PropTypes.string,
   smsVerified: React.PropTypes.bool,
+  smsCountryCode: React.PropTypes.string,
   emailVerified: React.PropTypes.bool,
   verifySmsHandler: React.PropTypes.func,
   verifyEmailHandler: React.PropTypes.func,

@@ -12,3 +12,4 @@ uwsgi
 plivo
 flask-migrate==1.8.0
 pyshorteners==0.6.0
+phone-iso3166==0.1.2

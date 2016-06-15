@@ -197,45 +197,6 @@ export function createAccount(username, email, password) {
   };
 }
 
-export function addLog(authToken, eventName, ...args) {
-  return dispatch => {
-    dispatch(addLogRequest());
-    const argdict = {};
-    for (let i = 0; i < args.length; i++) {
-      argdict[args[i][0]] = args[i][1];
-    }
-    fetch(`${GLOBAL.API_ROOT_VERSIONED}/logs`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(`${authToken}:`)}`,
-      },
-      body: JSON.stringify({
-        event_name: eventName,
-        ...argdict,
-      }),
-    })
-    .then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(addLogSuccess);
-        return dispatch(fetchLogs(authToken));
-      } else if (response.stats === 401) {
-        logoutRedirect(dispatch);
-      } else if (response.status >= 400 && response.status < 500) {
-        const error = new Error(response.statusText);
-        response.json().then(
-          errJson => {
-            error.error = errJson.error;
-            dispatch(addLogError(error));
-          }
-        );
-      }
-    }, error => {
-      // TODO catch any other errors?
-    });
-  };
-}
-
 export function fetchLogs(authToken) {
   return dispatch => {
     dispatch(fetchLogsRequest());
@@ -266,6 +227,46 @@ export function fetchLogs(authToken) {
       }
     }, error => {
       // TODO catch any errors?
+    });
+  };
+}
+
+export function addLog(authToken, eventName, ...args) {
+  return dispatch => {
+    dispatch(addLogRequest());
+    const argdict = {};
+    for (let i = 0; i < args.length; i++) {
+      argdict[args[i][0]] = args[i][1];
+    }
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/logs`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+      body: JSON.stringify({
+        event_name: eventName,
+        ...argdict,
+      }),
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(addLogSuccess);
+        dispatch(fetchLogs(authToken));
+      } else if (response.stats === 401) {
+        logoutRedirect(dispatch);
+      } else if (response.status >= 400 && response.status < 500) {
+        const error = new Error(response.statusText);
+        response.json().then(
+          errJson => {
+            error.error = errJson.error;
+            dispatch(addLogError(error));
+          }
+        );
+      }
+      return;
+    }, error => {
+      // TODO catch any other errors?
     });
   };
 }

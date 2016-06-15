@@ -6,7 +6,7 @@ from anylog.api.models import User, Log, db
 from anylog.api.basicAuth import requires_auth, requires_password_auth, authenticate
 from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema
 import json
-import plivo, plivoxml
+from phone_iso3166.country import phone_country
 
 api = Blueprint('api',__name__)
 
@@ -74,6 +74,7 @@ def get_user(username):
         username = g.user.username,
         email = g.user.email,
         sms_number = g.user.sms_number,
+        sms_country_code = phone_country(g.user.sms_number),
         sms_verified = g.user.sms_verified,
         email_verified = g.user.email_verified
     )
@@ -124,6 +125,7 @@ def put_user(username):
             username = g.user.username,
             email = g.user.email,
             sms_number = g.user.sms_number,
+            sms_country_code = phone_country(g.user.sms_number),
             sms_verified = g.user.sms_verified,
             email_verified = g.user.email_verified
         )

@@ -39,6 +39,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "moment": "^2.13.0",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
@@ -49,7 +50,6 @@
     "redux": "^3.5.2",
     "redux-form": "^5.2.5",
     "redux-persist": "^3.2.2",
-    "redux-thunk": "^2.1.0",
-    "moment": "^2.13.0"
+    "redux-thunk": "^2.1.0"
   }
 }

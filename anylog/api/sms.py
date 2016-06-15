@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, request
 from anylog.api.models import User, Log, db
 from datetime import datetime
 import plivo
+from phone_iso3166.country import phone_country
 
 sms = Blueprint('sms', __name__)
 
@@ -42,11 +43,18 @@ def receive_sms():
     return '', 200
 
 def send_sms(to_number, text):
+    cc = phone_country(to_number)
+
+    src = {
+        'US': '17077776191',
+        'CA': '13433441234'
+    }.get(cc, '17077776191')
+
     p = plivo.RestAPI(
             current_app.config['PLIVO_AUTH_ID'],
             current_app.config['PLIVO_AUTH_TOKEN'])
     params = {
-        'src': '17077776191',
+        'src': src,
         'dst': str(to_number),
         'text': text
     }

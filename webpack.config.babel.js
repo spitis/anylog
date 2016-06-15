@@ -17,6 +17,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'GLOBAL.API_ROOT_VERSIONED': JSON.stringify(`${PATHS.webroot}/api/v0.2`),
       'GLOBAL.API_ROOT': JSON.stringify(`${PATHS.webroot}/api`),
+      'GLOBAL.STATIC_ROOT': JSON.stringify(`${PATHS.webroot}/static`),
     }),
   ],
   entry: {

@@ -83,6 +83,7 @@ const userDefaultState = {
   emailVerified: false,
   smsNumber: null,
   smsVerified: false,
+  smsCountryCode: null,
 };
 
 function user(state = userDefaultState, action) {
@@ -144,6 +145,7 @@ function user(state = userDefaultState, action) {
         username: action.profile.username,
         email: action.profile.email,
         smsNumber: action.profile.sms_number,
+        smsCountryCode: action.profile.sms_country_code,
         emailVerified: action.profile.email_verified,
         smsVerified: action.profile.sms_verified,
       });
@@ -163,6 +165,7 @@ function user(state = userDefaultState, action) {
         username: action.profile.username,
         email: action.profile.email,
         smsNumber: action.profile.sms_number,
+        smsCountryCode: action.profile.sms_country_code,
         emailVerified: action.profile.email_verified,
         smsVerified: action.profile.sms_verified,
       });
