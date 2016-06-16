@@ -68,8 +68,6 @@ export default class LogRow extends React.Component {
 
   render() {
     if (this.state.isEditing) {
-      console.log(this.state);
-      console.log(this.props);
       return (
         <tr onClick={(e) => e.stopPropagation()}>
           <td style={{ position: 'relative' }}>
@@ -99,7 +97,7 @@ export default class LogRow extends React.Component {
             />
           </td>
           <td>
-            <Button block onClick={this.update}>Save</Button>
+            <Button block type="submit" onClick={this.update}>Save</Button>
           </td>
         </tr>
 
