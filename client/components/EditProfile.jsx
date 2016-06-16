@@ -1,5 +1,6 @@
 import React from 'react';
 import EditProfileForm from './EditProfileForm';
+import GenerateApiKey from './GenerateApiKey';
 import { Col } from 'react-bootstrap';
 import {
   fetchProfile,
@@ -106,6 +107,9 @@ export default class EditProfile extends React.Component {
           verifySmsHandler={this.verifySmsHandler}
           verifyEmailHandler={this.verifyEmailHandler}
         />
+        <br />
+        <hr />
+        <GenerateApiKey />
       </Col>
     );
   }

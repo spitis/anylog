@@ -11,7 +11,7 @@ import {
   clearError,
 } from '../actions';
 
-export default class DataSources extends React.Component {
+export default class DataSourcesList extends React.Component {
 
   componentWillMount() {
     const {
@@ -42,7 +42,7 @@ export default class DataSources extends React.Component {
   }
 
   render() {
-    const { smsVerified, emailVerified } = this.context.store.getState().user;
+    const { smsVerified, emailVerified, apiKey } = this.context.store.getState().user;
 
     const verification = (verified, type) => (
       verified ?
@@ -82,6 +82,12 @@ export default class DataSources extends React.Component {
           <tr>
             <td>SMS</td>
             <td>{verification(smsVerified, 'SMS number')}</td>
+          </tr><tr>
+            <td>API Key</td>
+            <td>{apiKey ?
+              <span style={{ color: 'green' }}>Active</span> :
+              <span style={{ color: 'red' }}><Link to="/editProfile">Activate</Link></span>
+            }</td>
           </tr>
           <tr>
             <td>Calendar</td>
@@ -125,6 +131,6 @@ export default class DataSources extends React.Component {
   }
 }
 
-DataSources.contextTypes = {
+DataSourcesList.contextTypes = {
   store: React.PropTypes.object,
 };

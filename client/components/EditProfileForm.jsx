@@ -99,6 +99,7 @@ const editProfileForm = (props) => {
 
   return (
     <div>
+      <h2>Profile</h2>
       {error}
       <Form horizontal onSubmit={editProfileHandler}>
         <FormGroup controlId="editProfile-username">

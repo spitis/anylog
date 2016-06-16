@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY, BIGINT
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY, BIGINT, UUID
 from itsdangerous import (TimedJSONWebSignatureSerializer,\
     BadSignature, SignatureExpired)
 db = SQLAlchemy()
@@ -36,6 +36,8 @@ class User(db.Model):
     sms_verified_on = db.Column('sms_verified_on', db.DateTime(timezone=True))
     email_verified = db.Column('email_verified', db.Boolean, default=False, server_default='f')
     email_verified_on = db.Column('email_verified_on', db.DateTime(timezone=True))
+
+    api_key = db.Column('api_key', UUID, unique=True)
 
     def __init__(self, username, email, password):
         """

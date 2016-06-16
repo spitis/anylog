@@ -403,3 +403,21 @@ export function updateLog(authToken, log) {
     });
   };
 }
+
+export function generateApiKey(authToken, username, password) {
+  return dispatch => {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/generate_api_key`, {
+      method: 'get',
+      headers: {
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+      },
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchProfile(authToken, username));
+      } else if (response.status >= 400 && response.status < 500) {
+        response.text().then((text) => console.log(text));
+      }
+    });
+  };
+}

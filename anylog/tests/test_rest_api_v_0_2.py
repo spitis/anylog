@@ -559,6 +559,22 @@ class Anylog_REST_API_Test_Case(unittest.TestCase):
 
         assert(len(resJson['logs']) == 0)
 
+    def test_can_generate_api_key(self):
+        user = User.query.first()
+
+        assert(user.api_key is None)
+
+        res = self.open_with_auth(
+            url= API_PREFIX + '/user/generate_api_key',
+            method='GET',
+            username=user.username,
+            password="password",
+            data=None
+        )
+
+        user = User.query.first()
+
+        assert(user.api_key is not None)
 
 if __name__ == '__main__':
     unittest.main()

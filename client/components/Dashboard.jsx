@@ -3,7 +3,7 @@ import { Responsive, WidthProvider as widthProvider } from 'react-grid-layout';
 const ResponsiveGridLayout = widthProvider(Responsive);
 import { default as Logs, LogsDash } from './Logs';
 import AddLog from './AddLog';
-import DataSources from './DataSources';
+import DataSourcesList from './DataSourcesList';
 import '../styles/Dashboard.scss';
 
 export default class Dashboard extends React.Component {
@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
         <div key={'b'}><DashItem dashTitle="Add log" ><AddLog /></DashItem></div>
         <div key={'c'}>
           <DashItem dashTitle="Data sources">
-            <DataSources />
+            <DataSourcesList />
           </DashItem>
         </div>
         <div key={'d'}>

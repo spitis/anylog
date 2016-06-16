@@ -84,6 +84,7 @@ const userDefaultState = {
   smsNumber: null,
   smsVerified: false,
   smsCountryCode: null,
+  apiKey: null,
 };
 
 function user(state = userDefaultState, action) {
@@ -148,6 +149,7 @@ function user(state = userDefaultState, action) {
         smsCountryCode: action.profile.sms_country_code,
         emailVerified: action.profile.email_verified,
         smsVerified: action.profile.sms_verified,
+        apiKey: action.profile.api_key,
       });
     case UPDATE_PROFILE_ATTEMPT:
       return Object.assign({}, state, {
@@ -168,6 +170,7 @@ function user(state = userDefaultState, action) {
         smsCountryCode: action.profile.sms_country_code,
         emailVerified: action.profile.email_verified,
         smsVerified: action.profile.sms_verified,
+        apiKey: action.profile.api_key,
       });
     default:
       return state;

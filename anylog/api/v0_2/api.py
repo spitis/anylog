@@ -3,11 +3,12 @@
 from flask import Blueprint, request, abort, g, jsonify
 from sqlalchemy import or_
 from anylog.api.models import User, Log, db
-from anylog.api.basicAuth import requires_auth, requires_password_auth, authenticate
+from anylog.api.basicAuth import requires_auth, requires_password_auth, requires_auth_accepts_api_key, authenticate
 from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema, updateEventSchema
 import json
 from phone_iso3166.country import phone_country
 from datetime import datetime
+import uuid
 
 api = Blueprint('api',__name__)
 
@@ -47,20 +48,6 @@ def insert_user():
             'error': "Must provide valid username, email and password."
         }), 400
 
-@api.route('/login', methods=['GET'])
-@requires_auth
-def login():
-    """
-    GET:
-        If authorized, returns an authentication token.
-    """
-    token = g.user.generate_auth_token(86400)
-    return jsonify({
-        'username': g.user.username,
-        'token': token.decode('ascii'),
-        'duration': 86400
-    }), 200
-
 @api.route('/user/<string:username>', methods=['GET'])
 @requires_auth
 def get_user(username):
@@ -77,7 +64,8 @@ def get_user(username):
         sms_number = g.user.sms_number,
         sms_country_code = phone_country(g.user.sms_number),
         sms_verified = g.user.sms_verified,
-        email_verified = g.user.email_verified
+        email_verified = g.user.email_verified,
+        api_key = g.user.api_key
     )
     return jsonify({'profile': res}), 200
 
@@ -128,14 +116,41 @@ def put_user(username):
             sms_number = g.user.sms_number,
             sms_country_code = phone_country(g.user.sms_number),
             sms_verified = g.user.sms_verified,
-            email_verified = g.user.email_verified
+            email_verified = g.user.email_verified,
+            api_key = g.user.api_key
         )
         return jsonify({'profile': res}), 200
 
     except Exception as e:
-        return {
+        return jsonify({
             'error': 'unknown error'
-        }, 400
+        }), 400
+
+@api.route('/user/generate_api_key', methods=['GET'])
+@requires_password_auth
+def generate_api_key():
+    try:
+        g.user.api_key = str(uuid.uuid4())
+        db.session.commit()
+        return jsonify({
+            'api_key': g.user.api_key
+        })
+    except:
+        abort(500)
+
+@api.route('/login', methods=['GET'])
+@requires_auth
+def login():
+    """
+    GET:
+        If authorized, returns an authentication token.
+    """
+    token = g.user.generate_auth_token(86400)
+    return jsonify({
+        'username': g.user.username,
+        'token': token.decode('ascii'),
+        'duration': 86400
+    }), 200
 
 @api.route('/log/<int:log_id>', methods=['PUT'])
 @requires_auth
@@ -200,6 +215,61 @@ def delete_log(log_id):
     db.session.commit()
 
     return '', 200
+
+@api.route('/log', methods=['POST'])
+@requires_auth_accepts_api_key
+def post_log():
+    """
+    POST:
+        Posts a new event.
+        Accepts JSON body _OR_ URL parameters:
+            timestamp :: Integer -- Unix/POSIX time, milliseconds
+            namespace :: String
+            event_name :: String
+            event_tags :: comma-separated String
+            event_text :: String --> results in event_json: {text: <event_text>}
+        URL parameters are OVERWRITTEN by body of request.
+    """
+
+    json = request.get_json(force=True, silent=True)
+    args = request.args.to_dict()
+
+    if not json:
+        json = {}
+
+    if 'event_text' in args:
+        if 'event_json' in json:
+            if not 'text' in json['event_json']:
+                json['event_json']['text'] = args['event_text']
+        else:
+            json['event_json'] = {
+                'text': args['event_text']
+            }
+        del args['event_text']
+
+    if 'event_tags' in args:
+        args['event_tags'] = args['event_tags'].split(',')
+
+    json = {**args, **json}
+
+    json['user'] = g.user
+
+    try:
+        newEventSchema(json)
+    except Exception as e:
+        return jsonify({
+            'error': 'Improper request. Check documentation and try again.'
+        }), 400
+
+    try:
+        log = Log(**json)
+        db.session.add(log)
+        db.session.commit()
+        return '', 200
+    except Exception as e:
+        return jsonify({
+            'error': 'unknown error'
+        }), 400
 
 @api.route('/logs', methods=['POST','GET'])
 @requires_auth
