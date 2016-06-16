@@ -216,9 +216,8 @@ def delete_log(log_id):
 
     return '', 200
 
-@api.route('/log', methods=['POST'])
-@requires_auth_accepts_api_key
-def post_log():
+@api.route('/log_with_api_key', methods=['POST'])
+def post_log_with_api_key():
     """
     POST:
         Posts a new event.
@@ -233,6 +232,16 @@ def post_log():
 
     json = request.get_json(force=True, silent=True)
     args = request.args.to_dict()
+
+    try:
+        uuid.UUID(args['api_key'], version=4)
+        user = User.query.filter(User.api_key == args['api_key']).first()
+    except:
+        return jsonify({
+            'error': 'Invalid API Key.'
+        }), 401
+
+    del args['api_key']
 
     if not json:
         json = {}
@@ -252,7 +261,7 @@ def post_log():
 
     json = {**args, **json}
 
-    json['user'] = g.user
+    json['user'] = user
 
     try:
         newEventSchema(json)
