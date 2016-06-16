@@ -58,8 +58,18 @@ export default class LogRow extends React.Component {
     this.props.dispatch(deleteLog(this.props.authToken, this.props.logId));
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      timestamp: moment(nextProps.timestamp).format('X'),
+      eventName: nextProps.eventName,
+      eventText: nextProps.eventText,
+    });
+  }
+
   render() {
     if (this.state.isEditing) {
+      console.log(this.state);
+      console.log(this.props);
       return (
         <tr onClick={(e) => e.stopPropagation()}>
           <td style={{ position: 'relative' }}>
