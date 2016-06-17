@@ -49,10 +49,7 @@ const loginForm = (props) => {
             Forgot password
           </Link>
         </div>*/}
-        <Button
-          type="submit"
-          block
-        >
+        <Button type="submit" block>
           Sign in
         </Button>
         {/* <div className="checkbox">

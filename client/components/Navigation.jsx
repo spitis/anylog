@@ -41,9 +41,7 @@ export default class Navigation extends React.Component {
         logoutHandler={this.logoutHandler}
       /> :
       <NavDropdown title="Login" id="login-navdropdown">
-        <div style={{ padding: '14px' }}>
-          <Login notCompressed />
-        </div>
+        <Login notCompressed padded />
       </NavDropdown>;
 
     return (

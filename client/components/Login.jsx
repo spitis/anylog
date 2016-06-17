@@ -17,7 +17,9 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <Row>
+      <Row
+        style={this.props.padded ? { padding: '14px' } : null}
+      >
         <Col
           sm={this.props.notCompressed ? 12 : 4}
           smOffset={this.props.notCompressed ? 0 : 4}
@@ -40,5 +42,6 @@ Login.contextTypes = {
 Login.propTypes = {
   notCompressed: React.PropTypes.bool,
   onSelect: React.PropTypes.func,
-  hidBottom: React.PropTypes.bool,
+  hideBottom: React.PropTypes.bool,
+  padded: React.PropTypes.bool,
 };
