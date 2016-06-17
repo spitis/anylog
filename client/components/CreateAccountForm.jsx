@@ -41,7 +41,7 @@ const createAccountForm = (props) => {
             required
           />
         </FormGroup>
-        <Button type="submit" bsStyle="primary" block>
+        <Button type="submit" block>
           Create account
         </Button>
       </form>

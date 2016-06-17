@@ -1,4 +1,44 @@
 @import "bootswatch.scss";
+@import "variables.scss";
+
+#title-wrapper {
+  text-align: center;
+  margin-top: 5%;
+
+  .panel {
+    text-align: left;
+  }
+}
+
+.title {
+  font-size: 4em;
+  color: $brand-primary;
+}
+
+.subtitle {
+  font-size: 1.5em;
+  padding-bottom: 1.5em;
+  font-family: $font-family-serif;
+  color: $gray-light;
+}
+
+@media (min-width: $screen-sm) {
+  .title-create-account {
+    padding: 0 30px 20px 40px;
+    border-left: 1px solid $gray-lighter;
+  }
+
+  .title-login {
+    padding: 0 40px 20px 30px;
+  }
+}
+
+@media (max-width: $screen-sm) {
+  .title-login {
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+  }
+}
 
 .title-font {
   font-family: "jaf-peacock-loop";

@@ -7,8 +7,10 @@
  */
 
 import React from 'react';
-import { browserHistory } from 'react-router';
-import { frontCopy } from '../res/config.jsx';
+import { Link, browserHistory } from 'react-router';
+import { Panel, Row, Col } from 'react-bootstrap';
+import CreateAccount from './CreateAccount';
+import Login from './Login';
 
 export default class Home extends React.Component {
 
@@ -40,9 +42,26 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <div>
-        {frontCopy}
-      </div>
+      <Row>
+        <div id="title-wrapper">
+          <div className="title title-font">anylog</div>
+          <div className="subtitle">Personal data logging and analytics. <Link to="/guide">Read the guide.</Link></div>
+          <Col md={8} mdOffset={2}>
+            <Panel>
+              <Row>
+                <Col sm={6} className="title-login">
+                  <h3>Login</h3>
+                  <Login notCompressed hideBottom />
+                </Col>
+                <Col sm={6} className="title-create-account">
+                  <h3>Create Account</h3>
+                  <CreateAccount notCompressed />
+                </Col>
+              </Row>
+            </Panel>
+          </Col>
+        </div>
+      </Row>
     );
   }
 }

@@ -1,0 +1,81 @@
+@import "variables";
+
+.guide-container {
+  font-size: 1.2em;
+
+  p {
+    margin: 20px 0;
+  }
+  ul {
+    margin-top: 10px;
+  }
+  
+  .api-highlight {
+    background-color: orange;
+  }
+
+}
+
+.anchor {
+  position: relative;
+
+  &:hover {
+    .anchor-icon {
+      opacity: 0.7;
+    }
+
+    text-decoration: none;
+  }
+
+  .anchor-icon {
+    color: $gray-light;
+    position: absolute;
+    left: -0.9em;
+    opacity: 0;
+    font-size: 0.9em;
+    top: 0.1em;
+  }
+}
+
+.guide-sidenav {
+  font-size: 1.2em;
+
+  a:hover {
+    background-color: transparent !important;
+  }
+
+  li > a {
+    padding: 2px 0 2px 8px;
+  }
+
+  & > li.active > a {
+    border-left: 2px solid $gray-light;
+    margin-left: -2px;
+  }
+
+  & > li  li > a:hover {
+    border-left: 2px solid $gray-lighter !important;
+    margin-left: -2px;
+  }
+
+  & > li > a:hover {
+    border-left: 2px solid $gray-lighter;
+    margin-left: -2px;
+  }
+
+  & > li li a {
+    padding-left: 24px;
+  }
+
+  & > li li.active a {
+    border-left: 2px solid $gray-light;
+    margin-left: -2px;
+  }
+}
+
+.back-to-top {
+  display: block;
+  margin-top: 14px;
+  padding-left: 8px;
+  color: $gray-light;
+}

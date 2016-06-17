@@ -22,6 +22,9 @@ const LoggedInDropdown = (props) => {
       <LinkContainer to={{ pathname: '/editProfile' }}>
         <MenuItem>Account</MenuItem>
       </LinkContainer>
+      <LinkContainer to={{ pathname: '/guide' }}>
+        <MenuItem>Help</MenuItem>
+      </LinkContainer>
       <MenuItem divider />
       <MenuItem onClick={props.logoutHandler}>Logout</MenuItem>
     </NavDropdown>

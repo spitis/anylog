@@ -51,7 +51,6 @@ const loginForm = (props) => {
         </div>*/}
         <Button
           type="submit"
-          bsStyle="primary"
           block
         >
           Sign in
@@ -63,12 +62,15 @@ const loginForm = (props) => {
               </label>
             </div>*/}
       </form>
-      <div className="bottom text-center">
-        New?&nbsp;&nbsp;&nbsp;
-        <Link to="/createaccount" onClick={selectHandler}>
-            Create an account
-        </Link>
-      </div>
+      {props.hideBottom ?
+        null :
+        <div className="bottom text-center">
+          New?&nbsp;&nbsp;&nbsp;
+          <Link to="/createaccount" onClick={selectHandler}>
+              Create an account
+          </Link>
+        </div>
+      }
     </div>
   );
 };
@@ -84,4 +86,5 @@ loginForm.propTypes = {
   fields: React.PropTypes.object,
   loginHandler: React.PropTypes.func,
   onSelect: React.PropTypes.func,
+  hideBottom: React.PropTypes.bool,
 };

@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import Page404 from './components/Page404';
 import CreateAccount from './components/CreateAccount';
 import EditProfile from './components/EditProfile';
+import Guide from './components/guide/Guide';
 
 const redirectToDash = (store) => (
   (_, replaceState) => {
@@ -30,6 +31,7 @@ export default (store) => (
     <Route path="/addLog" component={AddLog} />
     <Route path="/editProfile" component={EditProfile} />
     <Route path="/dashboard" component={Dashboard} />
+    <Route path="/guide" component={Guide} />
     <Route path="*" component={Page404} />
   </Route>
 );

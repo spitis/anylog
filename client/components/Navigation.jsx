@@ -3,6 +3,7 @@ import '../styles/Navigation.scss';
 import {
   Navbar,
   Nav,
+  NavDropdown,
   NavItem,
   Glyphicon,
 } from 'react-bootstrap';
@@ -12,7 +13,7 @@ import { appName } from '../res/config.jsx';
 
 import { login, logoutRedirect } from '../actions';
 
-import LoginDropdown from './LoginDropdown.jsx';
+import Login from './Login.jsx';
 import LoggedInDropdown from './LoggedInDropdown.jsx';
 import LoggedInOnly from './LoggedInOnly';
 
@@ -29,16 +30,6 @@ export default class Navigation extends React.Component {
     this.unsubscribe();
   }
 
-  loginHandler = (e) => {
-    e.preventDefault();
-    const { usernameOrEmail, password } = this.context.store.getState()
-      .form.login;
-    login(
-      usernameOrEmail.value,
-      password.value,
-    )(this.context.store.dispatch);
-  }
-
   logoutHandler = () => (logoutRedirect(this.context.store.dispatch))
 
   render() {
@@ -49,9 +40,11 @@ export default class Navigation extends React.Component {
         user={user}
         logoutHandler={this.logoutHandler}
       /> :
-      <LoginDropdown
-        loginHandler={this.loginHandler}
-      />;
+      <NavDropdown title="Login" id="login-navdropdown">
+        <div style={{ padding: '14px' }}>
+          <Login notCompressed />
+        </div>
+      </NavDropdown>;
 
     return (
       <Navbar className="navbar">
@@ -62,7 +55,7 @@ export default class Navigation extends React.Component {
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse className="no-transition">
-          <Nav pullRight className="nav navbar-nav">
+          <Nav pullRight className="right-top-nav nav navbar-nav">
             {/* <LoggedInOnly>
               <LinkContainer to={{ pathname: '/logs' }}>
                 <NavItem onClick={e => e.target.blur()} eventKey={1}>

@@ -4,7 +4,10 @@ import '../styles/anylog.scss';
 
 export default (props) => (
   <div>
-    <Navigation />
+    {props.location.pathname === '/' ?
+      null :
+      <Navigation />}
+
     <div className="container">
       {props.children}
     </div>
