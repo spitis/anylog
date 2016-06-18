@@ -1,9 +1,26 @@
 import React from 'react';
 import LoginForm from './LoginForm';
 import { Row, Col } from 'react-bootstrap';
-import { login } from '../actions';
+import { login, clearError } from '../actions';
 
 export default class Login extends React.Component {
+
+  componentWillMount() {
+    this.errorMessage = '';
+    this.unsubscribe = this.context.store.subscribe(() => {
+      const user = this.context.store.getState().user;
+      if ((user.loginError && user / user.loginError.error)
+        !== this.errorMessage) {
+        this.errorMessage = user.loginError && user.loginError.error;
+        this.forceUpdate();
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+    this.context.store.dispatch(clearError('loginError'));
+  }
 
   loginHandler = (e) => {
     e.preventDefault();
@@ -28,6 +45,7 @@ export default class Login extends React.Component {
             loginHandler={this.loginHandler}
             onSelect={this.props.onSelect}
             hideBottom={this.props.hideBottom}
+            errorMessage={this.errorMessage}
           />
         </Col>
       </Row>

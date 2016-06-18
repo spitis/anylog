@@ -8,6 +8,13 @@ $bootstrap-sass-asset-helper: false !default;
 //
 //## Gray and brand colors for use across Bootstrap.
 
+$color-primary: #2FA4E7;
+$color-light: #4DBEFF;
+$color-dark: #10689A;
+$color-contrast: #EAA16A;
+$color-high-contrast: #B44013;
+
+
 $gray-base:              #000 !default;
 $gray-darker:            lighten($gray-base, 13.5%) !default; // #222
 $gray-dark:              lighten($gray-base, 20%) !default;   // #333
@@ -15,11 +22,11 @@ $gray:                   lighten($gray-base, 33.5%) !default; // #555
 $gray-light:             lighten($gray-base, 60%) !default;   // #999
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
-$brand-primary:         #2FA4E7 !default;
-$brand-success:         #73A839 !default;
-$brand-info:            #033C73 !default;
-$brand-warning:         #DD5600 !default;
-$brand-danger:          #C71C22 !default;
+$brand-primary:         $color-primary !default;
+$brand-success:         $color-light !default;
+$brand-info:            $color-dark !default;
+$brand-warning:         $color-contrast !default;
+$brand-danger:          $color-high-contrast !default;
 
 
 //== Scaffolding
@@ -69,7 +76,7 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)) !default;
 $headings-font-family:    $font-family-base !default;
 $headings-font-weight:    500 !default;
 $headings-line-height:    1.2 !default;
-$headings-color:          #317EAC !default;
+$headings-color:          $color-dark !default;
 
 
 //== Iconography

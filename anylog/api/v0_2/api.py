@@ -4,7 +4,8 @@ from flask import Blueprint, request, abort, g, jsonify
 from sqlalchemy import or_
 from anylog.api.models import User, Log, db
 from anylog.api.basicAuth import requires_auth, requires_password_auth, requires_auth_accepts_api_key, authenticate
-from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema, updateEventSchema
+from anylog.api.schemas import userSchema, newEventSchema, getEventsSchema, updateEventSchema, newUserSchema
+from voluptuous import MultipleInvalid
 import json
 from phone_iso3166.country import phone_country
 from datetime import datetime
@@ -26,11 +27,22 @@ def insert_user():
     password = json.get('password')
     if (username is None) or (email is None) or (password is None):
         return jsonify({
-            'error': "Must provide valid username, email and password."
+            'error': "Username, email and password cannot be blank."
         }), 400
-    if User.query.filter(or_(User.username==username,User.email==email)).first() is not None:
+    if User.query.filter(User.username==username).first() is not None:
         return jsonify({
-            'error': "Username or email already exists."
+            'error': "Username already exists."
+        }), 400
+    if User.query.filter(User.email==email).first() is not None:
+        return jsonify({
+            'error': "Email already exists."
+        }), 400
+
+    try:
+        newUserSchema(json)
+    except MultipleInvalid as e:
+        return jsonify({
+            'error': str(e).split("for dictionary")[0]
         }), 400
 
     try:

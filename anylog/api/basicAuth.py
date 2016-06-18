@@ -43,7 +43,7 @@ def authenticate():
     Sends a 401 response that enables basic auth
     """
     return jsonify({
-        'error': 'Could not verify your access level for that URL.'
+        'error': 'Invalid login.'
     }), 401
 
 def requires_auth(f):

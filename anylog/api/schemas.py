@@ -27,6 +27,12 @@ def POSIX(msg=None):
             raise Invalid(msg or ("Invalid date format."))
     return f
 
+newUserSchema = Schema({
+    'username': All(str, Length(min=4, msg="Username must be at least 4 characters."), NotEmail("Username cannot be an email address.")),
+    'password': All(str, Length(min=8, msg="Password must be at least 8 characters.")),
+    'email': All(str, Email()),
+})
+
 userSchema = Schema({
     'username': All(str, Length(min=4), NotEmail()),
     'password': All(str, Length(min=8)),

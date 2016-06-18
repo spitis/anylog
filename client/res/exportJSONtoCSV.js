@@ -5,10 +5,30 @@ function stringify(stringOrJSON) {
   return stringOrJSON.toString();
 }
 
-export default function exportJSONtoCSV(JSONData, labels, filename) {
+function getEventJsonKeys(log) {
+  return Object.keys(log.event_json);
+}
+
+export default function exportJSONtoCSV(JSONData, filename, flattenJson = true) {
   // If JSONData is not an object then JSON.parse
   // will parse the JSON string in an Object
-  const arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
+  const inputData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
+
+  let labels;
+  const arrData = [];
+  if (flattenJson) {
+    labels = ['timestamp', 'event_name'];
+    for (let i = 0; i < inputData.length; i++) {
+      arrData.push(Object.assign({}, inputData[i]));
+      getEventJsonKeys(inputData[i]).forEach((key) => {
+        if (labels.indexOf(`_${key}`) === -1) { labels.push(`_${key}`); }
+        arrData[i][`_${key}`] = inputData[i].event_json[key];
+      });
+      delete arrData[i].event_json;
+    }
+  } else {
+    labels = ['timestamp', 'event_name', 'event_json'];
+  }
 
   let CSV = '';
 
@@ -28,7 +48,11 @@ export default function exportJSONtoCSV(JSONData, labels, filename) {
 
     // 2nd loop will extract each column and convert it in string comma-seprated
     for (let j = 0; j < labels.length; j++) {
-      row += `"${stringify(arrData[i][labels[j]])}",`;
+      if (arrData[i][labels[j]]) {
+        row += `"${stringify(arrData[i][labels[j]])}",`;
+      } else {
+        row += '"",';
+      }
     }
 
     CSV += `${row.slice(0, -1)} \r\n`;

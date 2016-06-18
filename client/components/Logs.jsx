@@ -53,7 +53,7 @@ export default class Logs extends React.Component {
   }
 
   exportToCSV = (logs) => () => {
-    exportJSONtoCSV(logs, ['timestamp', 'event_name', 'event_json'], 'export');
+    exportJSONtoCSV(logs, 'export');
   }
 
   render() {

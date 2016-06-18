@@ -13,7 +13,13 @@ const loginForm = (props) => {
   const {
     fields: { usernameOrEmail, password },
     loginHandler,
+    errorMessage,
   } = props;
+
+  let error;
+  if (errorMessage) {
+    error = <div className="form-error">{errorMessage}</div>;
+  }
 
   // this is a hack to make the dropdown disappear when there is a dropdown.
   let selectHandler = () => null;
@@ -49,15 +55,10 @@ const loginForm = (props) => {
             Forgot password
           </Link>
         </div>*/}
+        {error}
         <Button type="submit" block>
           Sign in
         </Button>
-        {/* <div className="checkbox">
-              <label>
-                <input type="checkbox" />
-                keep me logged-in
-              </label>
-            </div>*/}
       </form>
       {props.hideBottom ?
         null :
@@ -84,4 +85,5 @@ loginForm.propTypes = {
   loginHandler: React.PropTypes.func,
   onSelect: React.PropTypes.func,
   hideBottom: React.PropTypes.bool,
+  errorMessage: React.PropTypes.string,
 };

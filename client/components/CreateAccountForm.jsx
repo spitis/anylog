@@ -9,7 +9,16 @@ import {
 } from 'react-bootstrap';
 
 const createAccountForm = (props) => {
-  const { fields: { username, email, password }, createAccountHandler } = props;
+  const {
+    fields: { username, email, password },
+    createAccountHandler,
+    errorMessage,
+  } = props;
+
+  let error;
+  if (errorMessage) {
+    error = <div className="form-error">{errorMessage}</div>;
+  }
 
   return (
     <div>
@@ -41,6 +50,7 @@ const createAccountForm = (props) => {
             required
           />
         </FormGroup>
+        {error}
         <Button type="submit" block>
           Create account
         </Button>
@@ -59,4 +69,5 @@ export default CreateAccountForm;
 createAccountForm.propTypes = {
   createAccountHandler: React.PropTypes.func,
   fields: React.PropTypes.object,
+  errorMessage: React.PropTypes.string,
 };
