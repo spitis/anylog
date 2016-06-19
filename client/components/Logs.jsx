@@ -46,8 +46,24 @@ class Logs extends React.Component {
     this.props.dispatch(fetchLogs());
   }
 
+  shouldComponentUpdate = (nextProps) => {
+    // this is a bit of a hack since redux is calling update MANY times over,
+    // basically, does not update unless a log is "set to update", OR if the
+    // visible logs change (which can happen because you add a log)
+    if (this.update) {
+      if (!Object.is(nextProps.logsM[this.update], this.props.logsM[this.update])) {
+        this.update = 0;
+        return true;
+      }
+    }
+    if (arraysEqual(this.props.logIds, nextProps.logIds)) {
+      return false;
+    }
+    return true;
+  }
+
   render() {
-    const { logIds, logs, logsM, searchText, searchLogs, dispatch } = this.props;
+    const { logIds, logs, searchText, searchLogs, dispatch } = this.props;
     const noFilter = logIds.length === logs.length;
     return (
       <div>
@@ -68,15 +84,15 @@ class Logs extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {logs.map((log, i) => {
+              {logs.map((log) => {
                 if (noFilter || logIds.indexOf(log.id) !== -1) {
                   return (
                     <LogRow
-                      key={i}
+                      key={log.id}
 
                       logId={log.id}
                       dispatch={this.props.dispatch}
-
+                      forceLogsUpdate={(id) => { this.update = id; }}
                       timestamp={log.timestamp}
                       eventName={log.event_name}
                       eventText={log.event_json && log.event_json.text}
@@ -95,7 +111,10 @@ class Logs extends React.Component {
 }
 
 Logs.propTypes = {
+  logIds: React.PropTypes.array.isRequired,
   logs: React.PropTypes.array.isRequired,
+  logsM: React.PropTypes.object.isRequired,
+  searchText: React.PropTypes.string.isRequired,
   searchLogs: React.PropTypes.func.isRequired,
   dispatch: React.PropTypes.func,
 };
@@ -139,3 +158,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(Logs);
 
 export const LogsDash = connect(mapStateToProps, mapDispatchToProps)(dashItem(Logs, 'Logs'));
 export const LogsPage = connect(mapStateToProps, mapDispatchToProps)(page(Logs, 'Logs'));
+
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+
+  for (let i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}

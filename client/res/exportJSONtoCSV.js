@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 function stringify(stringOrJSON) {
   if (typeof stringOrJSON === 'object') {
     return JSON.stringify(stringOrJSON);
@@ -48,7 +50,9 @@ export default function exportJSONtoCSV(JSONData, filename, flattenJson = true) 
 
     // 2nd loop will extract each column and convert it in string comma-seprated
     for (let j = 0; j < labels.length; j++) {
-      if (arrData[i][labels[j]]) {
+      if (labels[j] === 'timestamp') {
+        row += `"${moment(arrData[i][labels[j]]).format('M/D/YY, h:mm a')}",`;
+      } else if (arrData[i][labels[j]]) {
         row += `"${stringify(arrData[i][labels[j]])}",`;
       } else {
         row += '"",';

@@ -45,13 +45,22 @@ export default class LogRow extends React.Component {
   }
 
   update = () => {
+    this.toggleEditing();
+
+    // if nothing changed, don't do anything
+    if ((this.state.timestamp === moment(this.props.timestamp).format('X'))
+      && (this.state.eventName === this.props.eventName)
+      && (this.state.eventText === this.props.eventText)
+    ) {
+      return;
+    }
     this.props.dispatch(updateLog({
       id: this.props.logId,
       eventName: this.state.eventName,
       timestamp: this.state.timestamp,
       eventText: this.state.eventText,
     }));
-    this.toggleEditing();
+    this.props.forceLogsUpdate(this.props.logId);
   }
 
   delete = () => {
@@ -124,6 +133,7 @@ export default class LogRow extends React.Component {
 LogRow.propTypes = {
   logId: React.PropTypes.number,
   dispatch: React.PropTypes.func,
+  forceLogsUpdate: React.PropTypes.func,
   timestamp: React.PropTypes.string,
   eventName: React.PropTypes.string,
   eventText: React.PropTypes.string,
