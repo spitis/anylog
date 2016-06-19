@@ -50,6 +50,9 @@ class Logs extends React.Component {
     // this is a bit of a hack since redux is calling update MANY times over,
     // basically, does not update unless a log is "set to update", OR if the
     // visible logs change (which can happen because you add a log)
+    if (this.props.searchText !== nextProps.searchText) {
+      return true;
+    }
     if (this.update) {
       if (!Object.is(nextProps.logsM[this.update], this.props.logsM[this.update])) {
         this.update = 0;
