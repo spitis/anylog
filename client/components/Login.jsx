@@ -3,15 +3,6 @@ import LoginForm from './LoginForm';
 import { reduxForm } from 'redux-form';
 import { login, clearError } from '../actions';
 
-LoginForm.propTypes = {
-  handleSubmit: React.PropTypes.func,
-  // onSelect: React.PropTypes.func,
-  // hideBottom: React.PropTypes.bool,
-  //  padded: React.PropTypes.bool,
-  //  notCompressed: React.PropTypes.bool,
-  errorMessage: React.PropTypes.string,
-};
-
 const Login = reduxForm(
   {
     form: 'login',
@@ -31,5 +22,12 @@ const Login = reduxForm(
     },
   })
 )(LoginForm);
+
+Login.propTypes = {
+  notCompressed: React.PropTypes.bool,
+  onSelect: React.PropTypes.func, // this is passed in by bootstrap navdropdown
+  hideBottom: React.PropTypes.bool,
+  padded: React.PropTypes.bool,
+};
 
 export default Login;

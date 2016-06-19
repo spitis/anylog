@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import { reducer as searchReducer } from 'redux-search';
 
 import {
   CLEAR_ERROR,
@@ -26,6 +27,7 @@ const logsDefaultState = {
   isFetchingLogs: false,
   fetchLogsError: null,
   logs: [],
+  logsMap: {},
 };
 
 function logs(state = logsDefaultState, action) {
@@ -58,6 +60,10 @@ function logs(state = logsDefaultState, action) {
         isFetchingLogs: false,
         fetchLogsError: action.error,
         logs: action.logs,
+        logsMap: Object.assign({}, action.logs.reduce(function (o, v) {
+          o[v.id] = v;
+          return o;
+        }, {})),
       });
     default:
       return state;
@@ -178,6 +184,7 @@ function user(state = userDefaultState, action) {
 }
 
 const app = combineReducers({
+  search: searchReducer,
   user,
   logs,
   form: formReducer,

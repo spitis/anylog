@@ -16,7 +16,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   entry: {
-    src: PATHS.src,
+    src: ['babel-polyfill', PATHS.src],
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],

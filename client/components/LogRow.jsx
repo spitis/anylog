@@ -123,7 +123,6 @@ export default class LogRow extends React.Component {
 
 LogRow.propTypes = {
   logId: React.PropTypes.number,
-  authToken: React.PropTypes.string,
   dispatch: React.PropTypes.func,
   timestamp: React.PropTypes.string,
   eventName: React.PropTypes.string,
