@@ -26,7 +26,7 @@ export default (store) => (
       store={store}
       onEnter={redirectToDash(store)}
     />
-    <Route path="/createaccount" component={CreateAccount} />
+  <Route path="/createaccount" component={CreateAccount} />
     <Route path="/logs" component={LogsPage} />
     <Route path="/addLog" component={AddLog} />
     <Route path="/editProfile" component={EditProfile} />

@@ -45,7 +45,7 @@ export default class LogRow extends React.Component {
   }
 
   update = () => {
-    this.props.dispatch(updateLog(this.props.authToken, {
+    this.props.dispatch(updateLog({
       id: this.props.logId,
       eventName: this.state.eventName,
       timestamp: this.state.timestamp,
@@ -55,7 +55,7 @@ export default class LogRow extends React.Component {
   }
 
   delete = () => {
-    this.props.dispatch(deleteLog(this.props.authToken, this.props.logId));
+    this.props.dispatch(deleteLog(this.props.logId));
   }
 
   componentWillReceiveProps = (nextProps) => {

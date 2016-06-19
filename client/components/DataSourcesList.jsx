@@ -22,7 +22,7 @@ export default class DataSourcesList extends React.Component {
       emailVerified,
       smsVerified,
     } = this.context.store.getState().user;
-    this.context.store.dispatch(fetchProfile(loginToken, username));
+    this.context.store.dispatch(fetchProfile());
     this.unsubscribe = this.context.store.subscribe(() => {
       const user = this.context.store.getState().user;
 

@@ -4,41 +4,24 @@ import {
   Navbar,
   Nav,
   NavDropdown,
-  NavItem,
-  Glyphicon,
 } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import { appName } from '../res/config.jsx';
 
-import { login, logoutRedirect } from '../actions';
+import { logoutRedirect } from '../actions';
 
 import Login from './Login.jsx';
 import LoggedInDropdown from './LoggedInDropdown.jsx';
-import LoggedInOnly from './LoggedInOnly';
 
-export default class Navigation extends React.Component {
-
-  componentDidMount() {
-    const { store } = this.context;
-    this.unsubscribe = store.subscribe(() =>
-       this.forceUpdate()
-    );
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  logoutHandler = () => (logoutRedirect(this.context.store.dispatch))
-
+class Navigation extends React.Component {
   render() {
-    const user = this.context.store.getState().user;
+    const { user, logoutHandler } = this.props;
     let brandLink = user.isLoggedIn ? '/dashboard' : '/';
     let rightMenu = user.isLoggedIn ?
       <LoggedInDropdown
         user={user}
-        logoutHandler={this.logoutHandler}
+        logoutHandler={logoutHandler}
       /> :
       <NavDropdown title="Login" id="login-navdropdown">
         <Login notCompressed padded />
@@ -69,6 +52,16 @@ export default class Navigation extends React.Component {
   }
 }
 
-Navigation.contextTypes = {
-  store: React.PropTypes.object,
+Navigation.propTypes = {
+  user: React.PropTypes.object.isRequired,
+  logoutHandler: React.PropTypes.func.isRequired,
 };
+
+export default connect(
+  (state) => ({
+    user: state.user,
+  }),
+  (dispatch) => ({
+    logoutHandler: () => { logoutRedirect(dispatch); },
+  })
+)(Navigation);

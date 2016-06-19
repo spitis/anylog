@@ -14,14 +14,12 @@ import {
 const generateApiKeyForm = (props) => {
   const {
     fields: { password },
-    authToken,
-    username,
     apiKey,
   } = props;
 
   const generateHandler = (e) => {
     e.preventDefault();
-    props.dispatch(generateApiKey(authToken, username, password.value));
+    props.dispatch(generateApiKey(password.value));
   };
 
   return (
@@ -69,8 +67,6 @@ const GenerateApiKeyForm = reduxForm(
   },
   state => ({
     initialValues: state.user,
-    authToken: state.user.loginToken,
-    username: state.user.username,
     apiKey: state.user.apiKey,
   })
 )(generateApiKeyForm);

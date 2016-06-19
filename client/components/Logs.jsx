@@ -48,8 +48,7 @@ export default class Logs extends React.Component {
   )
 
   fetchLogs = () => {
-    const authToken = this.context.store.getState().user.loginToken;
-    fetchLogs(authToken)(this.context.store.dispatch);
+    this.context.store.dispatch(fetchLogs());
   }
 
   exportToCSV = (logs) => () => {

@@ -197,8 +197,10 @@ export function createAccount(username, email, password) {
   };
 }
 
-export function fetchLogs(authToken) {
-  return dispatch => {
+export function fetchLogs() {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+
     dispatch(fetchLogsRequest());
     fetch(`${GLOBAL.API_ROOT_VERSIONED}/logs`, {
       method: 'get',
@@ -231,8 +233,10 @@ export function fetchLogs(authToken) {
   };
 }
 
-export function addLog(authToken, eventName, ...args) {
-  return dispatch => {
+export function addLog(eventName, ...args) {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+
     dispatch(addLogRequest());
     const argdict = {};
     for (let i = 0; i < args.length; i++) {
@@ -252,7 +256,7 @@ export function addLog(authToken, eventName, ...args) {
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
         dispatch(addLogSuccess);
-        dispatch(fetchLogs(authToken));
+        dispatch(fetchLogs());
       } else if (response.stats === 401) {
         logoutRedirect(dispatch);
       } else if (response.status >= 400 && response.status < 500) {
@@ -271,10 +275,16 @@ export function addLog(authToken, eventName, ...args) {
   };
 }
 
-export function fetchProfile(authToken, username) {
-  return dispatch => {
+export function fetchProfile(username = null) {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+    let uname = username;
+    if (!username) {
+      uname = getState().user.username;
+    }
+
     dispatch(fetchProfileRequest());
-    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/${username}`, {
+    fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/${uname}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -303,9 +313,9 @@ export function fetchProfile(authToken, username) {
   };
 }
 
-export function updateProfile(oldUsername, oldPassword, ...args) {
-  return dispatch => {
-    dispatch(updateProfileRequest());
+export function updateProfile(oldPassword, ...args) {
+  return (dispatch, getState) => {
+    const oldUsername = getState().user.username;
     const argdict = {};
     for (let i = 0; i < args.length; i++) {
       argdict[args[i][0]] = args[i][1];
@@ -342,26 +352,34 @@ export function updateProfile(oldUsername, oldPassword, ...args) {
   };
 }
 
-export function sendVerificationEmail(authToken) {
-  fetch(`${GLOBAL.API_ROOT}/verify/send_email`, {
-    method: 'get',
-    headers: {
-      Authorization: `Basic ${btoa(`${authToken}:`)}`,
-    },
-  });
+export function sendVerificationEmail() {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+    fetch(`${GLOBAL.API_ROOT}/verify/send_email`, {
+      method: 'get',
+      headers: {
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+    });
+  };
 }
 
-export function sendVerificationSms(authToken) {
-  fetch(`${GLOBAL.API_ROOT}/verify/send_sms`, {
-    method: 'get',
-    headers: {
-      Authorization: `Basic ${btoa(`${authToken}:`)}`,
-    },
-  });
+export function sendVerificationSms() {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+    fetch(`${GLOBAL.API_ROOT}/verify/send_sms`, {
+      method: 'get',
+      headers: {
+        Authorization: `Basic ${btoa(`${authToken}:`)}`,
+      },
+    });
+  };
 }
 
-export function deleteLog(authToken, logId) {
-  return dispatch => {
+export function deleteLog(logId) {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
+
     fetch(`${GLOBAL.API_ROOT_VERSIONED}/log/${logId}`, {
       method: 'delete',
       headers: {
@@ -370,7 +388,7 @@ export function deleteLog(authToken, logId) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchLogs(authToken));
+        dispatch(fetchLogs());
       } else if (response.status >= 400 && response.status < 500) {
         response.text().then((text) => console.log(text));
       }
@@ -378,8 +396,9 @@ export function deleteLog(authToken, logId) {
   };
 }
 
-export function updateLog(authToken, log) {
-  return dispatch => {
+export function updateLog(log) {
+  return (dispatch, getState) => {
+    const authToken = getState().user.loginToken;
     fetch(`${GLOBAL.API_ROOT_VERSIONED}/log/${log.id}`, {
       method: 'put',
       headers: {
@@ -396,7 +415,7 @@ export function updateLog(authToken, log) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchLogs(authToken));
+        dispatch(fetchLogs());
       } else if (response.status >= 400 && response.status < 500) {
         response.text().then((text) => console.log(text));
       }
@@ -404,8 +423,10 @@ export function updateLog(authToken, log) {
   };
 }
 
-export function generateApiKey(authToken, username, password) {
-  return dispatch => {
+export function generateApiKey(password) {
+  return (dispatch, getState) => {
+    const { username } = getState().user;
+
     fetch(`${GLOBAL.API_ROOT_VERSIONED}/user/generate_api_key`, {
       method: 'get',
       headers: {
@@ -414,7 +435,7 @@ export function generateApiKey(authToken, username, password) {
     })
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchProfile(authToken, username));
+        dispatch(fetchProfile());
       } else if (response.status >= 400 && response.status < 500) {
         response.text().then((text) => console.log(text));
       }

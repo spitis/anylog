@@ -1,5 +1,4 @@
 import React from 'react';
-import { reduxForm } from 'redux-form';
 
 import {
   ControlLabel,
@@ -8,18 +7,18 @@ import {
   Button,
 } from 'react-bootstrap';
 
-const addLogForm = (props) => {
+const AddLogForm = (props) => {
   const {
       fields: {
         eventName,
         eventText,
       },
-      addLogHandler,
+      handleSubmit,
     } = props;
 
   return (
     <div>
-      <form onSubmit={addLogHandler}>
+      <form onSubmit={handleSubmit}>
         <FormGroup controlId="addLog-eventName">
           <ControlLabel>Event</ControlLabel>
           <FormControl
@@ -45,14 +44,9 @@ const addLogForm = (props) => {
   );
 };
 
-const AddLogForm = reduxForm({
-  form: 'addLog',
-  fields: ['eventName', 'eventText'],
-})(addLogForm);
-
-export default AddLogForm;
-
-addLogForm.propTypes = {
-  addLogHandler: React.PropTypes.func,
+AddLogForm.propTypes = {
+  handleSubmit: React.PropTypes.func.isRequired,
   fields: React.PropTypes.object,
 };
+
+export default AddLogForm;
