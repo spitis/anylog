@@ -104,91 +104,93 @@ class EditProfileForm extends React.Component {
 
 
     return (
-      <Col lg={8} lgOffset={2}>
-        <div>
-          <h2>Profile</h2>
-          {error}
-          <Form horizontal onSubmit={handleSubmit}>
-            <FormGroup controlId="editProfile-username">
-              <Col componentClass={ControlLabel} sm={3}>Username</Col>
-              <Col sm={8}>
-                <FormControl
-                  {...username}
-                  type="text"
-                  placeholder="Username"
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup controlId="editProfile-email">
-              <Col componentClass={ControlLabel} sm={3}>Email</Col>
-              <Col sm={8}>
-                <FormControl
-                  {...email}
-                  type="email"
-                  placeholder="Email"
-                  required
-                />
-              </Col>
-              <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
-                  {verification('email', emailVerified, verifyEmailHandler)}
-              </Col>
-            </FormGroup>
-            <FormGroup controlId="editProfile-sms" block>
-              <Col componentClass={ControlLabel} sm={3}>SMS Number</Col>
-              <Col sm={8}>
-                <FormControl
-                  {...smsNumber}
-                  type="text"
-                  placeholder="SMS Number"
-                />
-              </Col>
-              <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
-                {verification('sms', smsVerified, verifySmsHandler)}
-              </Col>
-            </FormGroup>
-            {smsCountryCode ?
-              <Row>
-                <Col sm={8} smOffset={3} style={{ marginTop: '-10px', marginBottom: '12px' }}>
-                  {countryCodeMessage}
+      <div className="container">
+        <Col lg={8} lgOffset={2}>
+          <div>
+            <h2>Profile</h2>
+            {error}
+            <Form horizontal onSubmit={handleSubmit}>
+              <FormGroup controlId="editProfile-username">
+                <Col componentClass={ControlLabel} sm={3}>Username</Col>
+                <Col sm={8}>
+                  <FormControl
+                    {...username}
+                    type="text"
+                    placeholder="Username"
+                    required
+                  />
                 </Col>
-              </Row> : null}
-            <FormGroup controlId="editProfile-password">
-              <Col componentClass={ControlLabel} sm={3}>New Password</Col>
-              <Col sm={8}>
-                <FormControl
-                  {...password}
-                  type="password"
-                  placeholder="New Password"
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup controlId="editProfile-oldPassword">
-              <Col sm={11}>
-                <ControlLabel>
-                  Re-enter your password to make any changes:
-                </ControlLabel>
-                <FormControl
-                  {...oldPassword}
-                  type="password"
-                  placeholder="Old Password"
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <Row>
-              <Col sm={11}>
-                <Button type="submit" bsStyle="primary" block>
-                  Update Profile
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-        <br />
-        <hr />
-        <GenerateApiKey />
-      </Col>
+              </FormGroup>
+              <FormGroup controlId="editProfile-email">
+                <Col componentClass={ControlLabel} sm={3}>Email</Col>
+                <Col sm={8}>
+                  <FormControl
+                    {...email}
+                    type="email"
+                    placeholder="Email"
+                    required
+                  />
+                </Col>
+                <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
+                    {verification('email', emailVerified, verifyEmailHandler)}
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="editProfile-sms" block>
+                <Col componentClass={ControlLabel} sm={3}>SMS Number</Col>
+                <Col sm={8}>
+                  <FormControl
+                    {...smsNumber}
+                    type="text"
+                    placeholder="SMS Number"
+                  />
+                </Col>
+                <Col sm={1} style={{ fontSize: '1.25em', padding: '8px 0' }}>
+                  {verification('sms', smsVerified, verifySmsHandler)}
+                </Col>
+              </FormGroup>
+              {smsCountryCode ?
+                <Row>
+                  <Col sm={8} smOffset={3} style={{ marginTop: '-10px', marginBottom: '12px' }}>
+                    {countryCodeMessage}
+                  </Col>
+                </Row> : null}
+              <FormGroup controlId="editProfile-password">
+                <Col componentClass={ControlLabel} sm={3}>New Password</Col>
+                <Col sm={8}>
+                  <FormControl
+                    {...password}
+                    type="password"
+                    placeholder="New Password"
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="editProfile-oldPassword">
+                <Col sm={11}>
+                  <ControlLabel>
+                    Re-enter your password to make any changes:
+                  </ControlLabel>
+                  <FormControl
+                    {...oldPassword}
+                    type="password"
+                    placeholder="Old Password"
+                    required
+                  />
+                </Col>
+              </FormGroup>
+              <Row>
+                <Col sm={11}>
+                  <Button type="submit" bsStyle="primary" block>
+                    Update Profile
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+          <br />
+          <hr />
+          <GenerateApiKey />
+        </Col>
+      </div>
     );
   }
 }

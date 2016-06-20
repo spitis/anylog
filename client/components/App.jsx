@@ -8,7 +8,7 @@ export default (props) => (
       null :
       <Navigation />}
 
-    <div className="container">
+    <div>
       {props.children}
     </div>
   </div>

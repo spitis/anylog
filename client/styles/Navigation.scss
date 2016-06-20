@@ -9,7 +9,6 @@
   }
 }
 
-
 .no-transition {
   -webkit-transition: height 0.01s;
   -moz-transition: height 0.01s;
@@ -18,8 +17,9 @@
   transition: height 0.01s;
 }
 
-
 .right-top-nav {
+
+
   font-size: 1.2em;
 
   li>a {
@@ -38,6 +38,21 @@
   .title-font{
     font-size: 2.2em;
     position: relative;
-    top: 4px;
+    top: 6px;
+  }
+  position: relative;
+  width: 100%;
+  
+  .brand-centering-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .navbar-brand {
+    display: inline-block;
+    float: none;
   }
 }

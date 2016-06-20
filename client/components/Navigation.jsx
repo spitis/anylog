@@ -28,11 +28,13 @@ class Navigation extends React.Component {
       </NavDropdown>;
 
     return (
-      <Navbar className="navbar">
+      <Navbar className="navbar" fluid>
         <Navbar.Header>
-          <Navbar.Brand>
-            <Link to={brandLink} className="title-font">{appName}</Link>
-          </Navbar.Brand>
+          <div className="brand-centering-wrapper">
+            <Navbar.Brand>
+              <Link to={brandLink} className="title-font">{appName}</Link>
+            </Navbar.Brand>
+          </div>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse className="no-transition">

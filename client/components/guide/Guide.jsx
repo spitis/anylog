@@ -116,7 +116,7 @@ export default class Guide extends React.Component {
   }
 
   render = () => (
-    <div>
+    <div className="container">
       <Row>
         <Col md={12}>
           <h1>The Guide</h1>

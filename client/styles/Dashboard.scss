@@ -1,6 +1,9 @@
 @import "variables";
 @import "bootstrap/mixins";
 
+.dashboard {
+  margin: 0 30px;
+}
 .dash-item {
   background-color: #fff;
   border: 1px solid #ddd;
