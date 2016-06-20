@@ -21,10 +21,11 @@ export default class Dashboard extends React.Component {
         { i: 'vis', x: 8, y: 0, w: 4, h: 7, minH: 4, minW: 4 },
       ],
       md: [
-        { i: 'a', x: 0, y: 0, w: 7, h: 7, minW: 6, minH: 4 },
+        { i: 'a', x: 0, y: 0, w: 7, h: 6, minW: 6, minH: 4 },
         { i: 'b', x: 7, y: 0, w: 3, h: 3, minW: 2, minH: 3, maxW: 4 },
-        { i: 'c', x: 7, y: 3, w: 3, h: 4, maxW: 4 },
-        { i: 'd', x: 0, y: 7, w: 5, h: 2, maxW: 5 },
+        { i: 'c', x: 7, y: 3, w: 3, h: 3, maxW: 4 },
+        { i: 'd', x: 0, y: 6, w: 5, h: 2, maxW: 5 },
+        { i: 'vis', x: 5, y: 6, w: 5, h: 5, minH: 4, minW: 4 },
       ],
       sm: [
         { i: 'a', x: 0, y: 3, w: 7, h: 7, minW: 6, minH: 4 },

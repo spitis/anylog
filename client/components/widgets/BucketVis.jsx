@@ -3,9 +3,19 @@ import { connect } from 'react-redux';
 import { Chart } from 'chart.js';
 import moment from 'moment';
 
+function fitCanvasToContainer(canvas) {
+  // Make it visually fill the positioned parent
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  // ...then set the internal size to match
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+
 class BucketVisGraph extends React.Component {
   componentDidMount() {
     const chartCanvas = this.refs.chart;
+    fitCanvasToContainer(chartCanvas);
 
     const myChart = new Chart(chartCanvas, {
       type: 'bar',
@@ -17,6 +27,7 @@ class BucketVisGraph extends React.Component {
   }
 
   componentDidUpdate() {
+
     const chart = this.state.chart;
     const data = this.props.data;
 
@@ -28,7 +39,9 @@ class BucketVisGraph extends React.Component {
 
   render() {
     return (
-      <canvas ref={'chart'} height={'100%'} width={'100%'}></canvas>
+      <div style={{ width: '100%', height: '100%' }}>
+        <canvas ref={'chart'} height={'100%'} width={'100%'}></canvas>
+      </div>
     );
   }
 }
@@ -48,7 +61,7 @@ const BucketVis = (props) => {
   }
 
   props.logs.forEach((log) => {
-    const i = moment(log.timestamp).diff(moment(), 'days') + 6;
+    const i = moment(log.timestamp).diff(moment().startOf('day'), 'days') + 6;
     if ((0 <= i) && (i <= 6)) {
       data[i] += 1;
     }
