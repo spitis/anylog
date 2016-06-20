@@ -27,6 +27,8 @@ class BucketVisGraph extends React.Component {
   }
 
   componentDidUpdate() {
+    const chartCanvas = this.refs.chart;
+    fitCanvasToContainer(chartCanvas);
 
     const chart = this.state.chart;
     const data = this.props.data;
@@ -34,7 +36,7 @@ class BucketVisGraph extends React.Component {
     data.datasets.forEach((dataset, i) => chart.data.datasets[i].data = dataset.data);
 
     chart.data.labels = data.labels;
-    chart.update();
+    chart.resize().update();
   }
 
   render() {
@@ -84,6 +86,7 @@ const BucketVis = (props) => {
         ],
       }}
       options={{
+        maintainAspectRatio: false,
         scales: {
           yAxes: [{
             display: true,
