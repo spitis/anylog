@@ -61,7 +61,7 @@ const BucketVis = (props) => {
   }
 
   props.logs.forEach((log) => {
-    const i = moment(log.timestamp).diff(moment().startOf('day'), 'days') + 6;
+    const i = moment(log.timestamp).diff(moment().endOf('day'), 'days') + 6;
     if ((0 <= i) && (i <= 6)) {
       data[i] += 1;
     }
